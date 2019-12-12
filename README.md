@@ -28,3 +28,5 @@
 ## Linki
 
 - [Slajdy](http://www.mini.pw.edu.pl/~okulewiczm/downloads/html/HTML_6_Projects.pdf)
+- https://coral.ise.lehigh.edu/larry/software/vrp-solver/
+- https://developers.google.com/optimization
