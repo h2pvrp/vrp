@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using System;
+using System.Net.WebSockets;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace VrpBackend
@@ -15,6 +18,7 @@ namespace VrpBackend
     
     public class WebSocketMiddleware
     {
+        private const int _BUFFER_SIZE = 1024 * 4;
         private readonly RequestDelegate _next;
         private readonly WebSocketHandler _webSocketHandler;
         
@@ -26,7 +30,21 @@ namespace VrpBackend
         
         public async Task InvokeAsync(HttpContext context)
         {
-            await context.Response.WriteAsync("Elo");
+            //TODO authentication
+            if (!context.WebSockets.IsWebSocketRequest)
+                return;
+
+            WebSocket socket = await context.WebSockets.AcceptWebSocketAsync();
+            _webSocketHandler.OnConnected(socket);
+            var buffer = new byte[_BUFFER_SIZE];
+            WebSocketReceiveResult result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), 
+                CancellationToken.None);
+            while (!result.CloseStatus.HasValue)
+            {
+                await _webSocketHandler.OnMessage(socket, result, buffer);
+                result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+            }
+            _webSocketHandler.OnDisconnected(socket);
         }
     }
 }
