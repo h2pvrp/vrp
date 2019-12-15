@@ -34,6 +34,8 @@ namespace VrpBackend
             {
                 app.UseDeveloperExceptionPage();
             }
+            
+            app.UseWebSockets();
 
             app.UseRouting();
 
@@ -43,7 +45,7 @@ namespace VrpBackend
             {
                 endpoints.MapControllers();
             });
-            app.MapWebSockets("/api", new EchoHandler());
+            app.MapWebSockets("/ws", new EchoHandler());
         }
     }
 }
