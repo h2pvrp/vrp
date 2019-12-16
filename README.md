@@ -104,3 +104,7 @@ odpowiedzi od workerów i asynchronicznie wysyła do klienta rozwiązania za pom
 
 API przyjmujące dane od klientów i komunikujące się z workerami za pomocą protokołu HTTP i
 uaktualniające dane użytkowników w bazie. Zbierane są dane o lokalizacji użytkowników.
+
+# Architektura
+
+![arch.png](./arch.png)
