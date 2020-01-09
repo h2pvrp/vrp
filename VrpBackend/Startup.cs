@@ -45,7 +45,7 @@ namespace VrpBackend
             {
                 endpoints.MapControllers();
             });
-            app.MapWebSockets("/ws", new EchoHandler());
+            app.MapWebSockets("/ws", new JsonEchoHandler());
         }
     }
 }

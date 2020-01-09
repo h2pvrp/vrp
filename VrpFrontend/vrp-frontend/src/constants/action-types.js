@@ -1,0 +1,4 @@
+export const ADD_PACKAGE = "ADD_PACKAGE";
+export const DELETE_PACKAGE = "DELETE_PACKAGE";
+export const SELECT_PACKAGE = "SELECT_PACKAGE";
+export const CENTER_MAP = "CENTER_MAP";
