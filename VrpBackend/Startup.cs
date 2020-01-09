@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using VrpBackend.EntityFramework;
 
 namespace VrpBackend
 {
@@ -25,6 +27,8 @@ namespace VrpBackend
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddEntityFrameworkNpgsql().AddDbContext<WebApiContext>(opt =>
+                opt.UseNpgsql(Configuration.GetConnectionString("WebApiConection"), o => o.UseNetTopologySuite()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,5 +51,7 @@ namespace VrpBackend
             });
             app.MapWebSockets("/ws", new EchoHandler());
         }
+
+        
     }
 }
