@@ -5,6 +5,7 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import store from "./js/store/index";
 import App from "./js/components/App";
 import Register from "./js/components/Register";
+import "bootstrap/dist/css/bootstrap.css";
 
 render(
   <Provider store={store}>

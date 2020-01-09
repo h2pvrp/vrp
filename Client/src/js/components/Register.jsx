@@ -20,58 +20,65 @@ class Register extends Component {
     console.log(this.state);
   };
 
+  Field = ({ label, onChange, name, value, type = "text" }) => {
+    return (
+      <div>
+        <label className="control-label">{label}</label>
+        <input
+          onChange={onChange}
+          value={value}
+          name={name}
+          type={type}
+          className="form-control"
+        />
+      </div>
+    );
+  };
+
   render() {
     return (
-      <form onSubmit={this.onSubmit}>
-        <h1>Register!</h1>
+      <div className="row">
+        <div className="col-md-4 col-md-offset-4 m-4">
+          <form onSubmit={this.onSubmit}>
+            <h1>Register!</h1>
 
-        <div>
-          <label className="control-label">Username</label>
-          <input
-            onChange={this.onChange}
-            value={this.state.username}
-            name="username"
-            className="form-control"
-          />
-        </div>
+            <this.Field
+              label="Username"
+              onChange={this.onChange}
+              value={this.state.username}
+              name="username"
+            />
 
-        <div>
-          <label className="control-label">Email</label>
-          <input
-            onChange={this.onChange}
-            value={this.state.email}
-            name="email"
-            type="email"
-            className="form-control"
-          />
-        </div>
+            <this.Field
+              label="Email"
+              onChange={this.onChange}
+              value={this.state.email}
+              name="email"
+              type="email"
+            />
 
-        <div>
-          <label className="control-label">Password</label>
-          <input
-            onChange={this.onChange}
-            value={this.state.password}
-            name="password"
-            type="password"
-            className="form-control"
-          />
-        </div>
+            <this.Field
+              label="Password"
+              onChange={this.onChange}
+              value={this.state.password}
+              name="password"
+              type="password"
+            />
 
-        <div>
-          <label className="control-label">Password Confirmation</label>
-          <input
-            onChange={this.onChange}
-            value={this.state.passwordConfirmation}
-            name="passwordConfirmation"
-            type="password"
-            className="form-control"
-          />
-        </div>
+            <this.Field
+              label="Password Confirmation"
+              onChange={this.onChange}
+              value={this.state.passwordConfirmation}
+              name="passwordConfirmation"
+              type="password"
+            />
 
-        <div className="form-group">
-          <button className="btn btn-primary btn-lg">Sign up</button>
+            <div className="form-group m-2">
+              <button className="btn btn-primary btn-lg">Sign up</button>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     );
   }
 }
