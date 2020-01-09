@@ -1,13 +1,7 @@
 import { ADD_ARTICLE, DATA_LOADED, DATA_REQUESTED } from "../constants/action-types";
 
-export function addArticle(payload) {
-  return { type: ADD_ARTICLE, payload };
-}
+export const addArticle = payload => ({ type: ADD_ARTICLE, payload });
 
-export function dataLoaded(payload) {
-  return { type: DATA_LOADED, payload };
-}
+export const getData = () => ({ type: DATA_REQUESTED });
+export const dataLoaded = payload => ({ type: DATA_LOADED, payload });
 
-export function getData() {
-  return { type: DATA_REQUESTED };
-}
