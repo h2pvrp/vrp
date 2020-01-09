@@ -46,13 +46,14 @@ function rootReducer(state = initialState, action) {
       };
 
     case REDUX_WEBSOCKET_CONNECT:
-      console.log('Aw shit mane I connected')
+      console.log('Trynna connect...')
       return {
         ...state,
         url: action.payload.url,
       };
 
     case REDUX_WEBSOCKET_OPEN:
+      console.log('Aw mane I connected!')
       return {
         ...state,
         connected: true,
@@ -60,13 +61,14 @@ function rootReducer(state = initialState, action) {
 
     case REDUX_WEBSOCKET_BROKEN:
     case REDUX_WEBSOCKET_CLOSED:
+      console.error('Connection broken!', action)
       return {
         ...state,
         connected: false,
       };
 
     case REDUX_WEBSOCKET_MESSAGE:
-      console.log('what is going on heere', action)
+      console.log('You\'ve got mail' , action)
       return {
         ...state,
         messages: [
@@ -81,6 +83,7 @@ function rootReducer(state = initialState, action) {
       };
 
     case REDUX_WEBSOCKET_SEND:
+      console.log('Trynna send' , action)
       return {
         ...state,
         messages: [

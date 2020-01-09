@@ -8,7 +8,7 @@ import {
   WEBSOCKET_SEND,
 } from '@giantmachines/redux-websocket';
 
-export const WEBSOCKET_PREFIX = 'REDUX_WEBSOCKET';
+export const WEBSOCKET_PREFIX = 'REDUX_WEBSOCKET_DEMO';
 
 export const REDUX_WEBSOCKET_BROKEN = `${WEBSOCKET_PREFIX}::${WEBSOCKET_BROKEN}`;
 export const REDUX_WEBSOCKET_OPEN = `${WEBSOCKET_PREFIX}::${WEBSOCKET_OPEN}`;

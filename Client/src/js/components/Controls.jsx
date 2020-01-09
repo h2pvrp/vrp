@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import {  } from "../actions/index";
-
 import { connect as wsConnect, send as wsSend } from '@giantmachines/redux-websocket';
 
 import { WEBSOCKET_PREFIX } from "../constants/action-types";
@@ -10,7 +8,7 @@ import { WEBSOCKET_PREFIX } from "../constants/action-types";
 function mapDispatchToProps(dispatch) {
   return {
     connect: () => dispatch(wsConnect('ws://localhost:5000/ws', WEBSOCKET_PREFIX)),
-    send: (message) => dispatch(wsSend(message)),
+    send: (message) => dispatch(wsSend(message, WEBSOCKET_PREFIX)),
   };
 }
 
@@ -36,7 +34,6 @@ class ConnectedControls extends Component {
     inp.value = "";
 
     this.props.send(message);
-    console.log('Sent:', message);
   }
 
   render() {
