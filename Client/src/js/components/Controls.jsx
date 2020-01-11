@@ -7,7 +7,7 @@ import { WEBSOCKET_PREFIX } from "../constants/action-types";
 
 function mapDispatchToProps(dispatch) {
   return {
-    connect: () => dispatch(wsConnect('ws://localhost:5000/ws', WEBSOCKET_PREFIX)),
+    connect: () => dispatch(wsConnect('wss://localhost:5001/ws', WEBSOCKET_PREFIX)),
     send: (message) => dispatch(wsSend(message, WEBSOCKET_PREFIX)),
   };
 }
