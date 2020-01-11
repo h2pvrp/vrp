@@ -2,3 +2,9 @@ bin/
 obj/
 .DS_Store
 .vscode
+.vs/vrp/v16/.suo
+package-lock.json
+.vs/ProjectSettings.json
+.vs/slnx.sqlite
+.vs/VSWorkspaceState.json
+Client/package-lock.json

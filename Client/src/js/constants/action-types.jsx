@@ -20,5 +20,9 @@ export const REDUX_WEBSOCKET_SEND = `${WEBSOCKET_PREFIX}::${WEBSOCKET_SEND}`;
 
 export const ADD_ARTICLE = "ADD_ARTICLE";
 export const DATA_LOADED = "DATA_LOADED";
+
+export const REGISTER_USER = "REGISTER_USER";
+
 export const DATA_REQUESTED = "DATA_REQUESTED";
 export const API_ERRORED = "API_ERRORED";
+
