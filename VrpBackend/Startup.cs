@@ -80,6 +80,9 @@ namespace VrpBackend
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+//<<<<<<< feature/frontend
+//            app.MapWebSockets("/ws", new JsonEchoHandler());
+//=======
 
             app.UseWebSockets();
             app.MapWebSockets("/ws", new EchoHandler());
@@ -93,6 +96,7 @@ namespace VrpBackend
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
+//>>>>>>> master
         }
     }
 }
