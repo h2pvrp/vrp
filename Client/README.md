@@ -1,3 +1,6 @@
+# SPA Frontend
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
@@ -66,3 +69,11 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+## Links
+
+- [Getting started with React](https://www.taniarascia.com/getting-started-with-react/)
+- [React Redux tutorial](https://www.valentinog.com/blog/redux/)
+- [redux-websocket](https://github.com/giantmachines/redux-websocket)
+- [redux-websocket-example](https://github.com/maxnachlinger/redux-websocket-example)
+- [Write your own WebSocket middleware for React/Redux in 4 Steps](https://dev.to/aduranil/how-to-use-websockets-with-redux-a-step-by-step-guide-to-writing-understanding-connecting-socket-middleware-to-your-project-km3)

@@ -3,6 +3,11 @@ obj/
 .DS_Store
 .vscode
 
+.vs/vrp/v16/.suo
+.vs/ProjectSettings.json
+.vs/slnx.sqlite
+.vs/VSWorkspaceState.json
+
 node_modules/
 .pnp.js
 .DS_Store
@@ -14,4 +19,3 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
