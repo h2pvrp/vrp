@@ -1,31 +1,19 @@
 import React from "react";
-import List from "./List";
-import Form from "./Form";
 import Post from "./Posts";
-import Controls from "./Controls";
-import MessagesList from "./MessagesList";
+
+import { Navbar, Container } from 'react-bootstrap'
+import MapViev from './MapViev';
 
 const App = () => (
-  <>
+  <Container className="main">
     <div>
-      <h2>Articles</h2>
-      <List />
+        <MapViev/>
     </div>
     <div>
-      <h2>Add a new article</h2>
-      <Form />
+        <h2>API posts</h2>
+        <Post />
     </div>
-    <div>
-      <h2>API posts</h2>
-      <Post />
-    </div>
-    <div>
-      <h2>WebSocket</h2>
-      <Controls />
-      <h3>Messages</h3>
-      <MessagesList />
-    </div>
-  </>
+  </Container>
 );
 
 export default App;

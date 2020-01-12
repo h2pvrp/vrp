@@ -1,7 +1,34 @@
-import { ADD_ARTICLE, DATA_LOADED, DATA_REQUESTED } from "../constants/action-types";
-
-export const addArticle = payload => ({ type: ADD_ARTICLE, payload });
+import {
+  DATA_LOADED,
+  DATA_REQUESTED,
+  ADD_PACKAGE,
+  DELETE_PACKAGE,
+  CENTER_MAP,
+  SELECT_PACKAGE
+} from "../constants/action-types";
 
 export const getData = () => ({ type: DATA_REQUESTED });
 export const dataLoaded = payload => ({ type: DATA_LOADED, payload });
 
+export const add_package = (latitude, longitude) => ({
+  type: ADD_PACKAGE,
+  package: {
+    latitude,
+    longitude
+  }
+})
+
+export const delete_package = index =>({
+  type: DELETE_PACKAGE,
+  index
+})
+
+export const center_map = index => ({
+  type: CENTER_MAP,
+  index
+})
+
+export const select_package = index => ({
+  type: SELECT_PACKAGE,
+  index
+})
