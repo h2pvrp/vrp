@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { Container, Row, Col, ListGroup, Button } from 'react-bootstrap'
-import { Map, TileLayer, Marker } from 'react-leaflet'
+import { Map, TileLayer, Marker, Polyline } from 'react-leaflet'
 import L from 'leaflet';
 import { send } from '@giantmachines/redux-websocket';
 import {
@@ -44,7 +44,9 @@ const mapStateToProps = state => ({
   packages: state.packages,
   map_state: state.map_state,
   depo: state.depo,
-  selected_package: state.selected_package
+  selected_package: state.selected_package,
+  routes: state.routes,
+  depoWrapper: state.depo ? [state.depo] : [],
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -134,10 +136,8 @@ class ConnectedMapViev extends Component {
   }
 
   render() {
-    const { latitude, longitude, zoom, packages, selected_package, depo } = this.props;
+    const { latitude, longitude, zoom, packages, selected_package, depo, routes, depoWrapper } = this.props;
     const position = [latitude, longitude];
-
-    const depoWrapper = depo ? [depo] : [];
 
     return (
       <Row>
@@ -156,6 +156,12 @@ class ConnectedMapViev extends Component {
                 <Marker key="depo" position={[d.latitude, d.longitude]} icon={iconDepo}
                 onClick={this.onDepoMarkerClick}/>
               );
+            })}
+
+            {routes.filter((route) => !route.hidden).map((value, index) => {
+              return (
+                <Polyline key={index} positions={value.polyline} color={value.color} />
+                )
             })}
 
           </Map>
@@ -183,6 +189,17 @@ class ConnectedMapViev extends Component {
           </div>
 
           <Button className="w-100" variant="success" onClick={this.onSendClick}>Send</Button>
+
+          <h3>Routes</h3>
+          {routes.map((value, index) => {
+            return (
+              <div key={index} className="form-group form-check">
+                <input type="checkbox" className="form-check-input" id={index}></input>
+                <label className="form-check-label" htmlFor={index}>{value.name}</label>
+              </div>
+              )
+          })}
+
         </Col>
       </Row>
     )
