@@ -9,7 +9,8 @@ import {
   TOGGLE_DEPO_MODE,
   ADD_DEPO,
   CENTER_MAP,
-  SELECT_PACKAGE
+  SELECT_PACKAGE,
+  SET_ROUTE_VISIBILITY,
 } from "../constants/action-types";
 
 import { DEFAULT_PREFIX, WEBSOCKET_MESSAGE } from '@giantmachines/redux-websocket';
@@ -147,6 +148,14 @@ function rootReducer(state = initialState, action) {
         selected_package: action.index,
         last_deleted_package: null
       };
+
+    case SET_ROUTE_VISIBILITY:
+      const updatedRoutes = [...state.routes];
+      updatedRoutes[action.index].hidden = action.isVisible;
+      return {
+        ...state,
+        routes: updatedRoutes,
+      }
 
     case `${DEFAULT_PREFIX}::${WEBSOCKET_MESSAGE}`:
       const payload = JSON.parse(action.payload.message);

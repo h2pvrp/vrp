@@ -13,6 +13,7 @@ import {
   toggle_edit_mode,
   toggle_depo_mode,
   add_depo,
+  set_route_visibility,
 } from '../actions'
 import { ATTRIBUTION, MAP_URL } from '../constants/config'
 import 'leaflet/dist/leaflet.css';
@@ -58,8 +59,9 @@ const mapDispatchToProps = dispatch => ({
   add_depo: (latitude, longitude) => dispatch(add_depo(latitude, longitude)),
   center_map: index => dispatch(center_map(index)),
   select_package: index => dispatch(select_package(index)),
-  websocket_send: data => dispatch(send(data))
-})
+  websocket_send: data => dispatch(send(data)),
+  set_route_visibility: (index, isVisible) => dispatch(set_route_visibility(index, isVisible)),
+});
 
 class ConnectedMapViev extends Component {
   constructor(props) {
@@ -71,6 +73,7 @@ class ConnectedMapViev extends Component {
     this.onEditClick = this.onEditClick.bind(this);
     this.onSendClick = this.onSendClick.bind(this);
     this.onDepoClick = this.onDepoClick.bind(this);
+    this.onCheckboxChange = this.onCheckboxChange.bind(this);
   }
 
   onMapClick(event) {
@@ -124,6 +127,13 @@ class ConnectedMapViev extends Component {
 
   onDepoMarkerClick(event) {
     // console.log(event);
+  }
+
+  onCheckboxChange(index) {
+    return event => {
+      const { set_route_visibility } = this.props;
+      set_route_visibility(index, event.target.checked);
+    }
   }
 
   onSendClick(event) {
@@ -194,7 +204,7 @@ class ConnectedMapViev extends Component {
           {routes.map((value, index) => {
             return (
               <div key={index} className="form-group form-check">
-                <input type="checkbox" className="form-check-input" id={index}></input>
+                <input type="checkbox" className="form-check-input" id={index} key={index} onChange={this.onCheckboxChange(index)}></input>
                 <label className="form-check-label" htmlFor={index}>{value.name}</label>
               </div>
               )
