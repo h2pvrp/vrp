@@ -6,7 +6,9 @@ from aioworker import blocking_handler_wrapper, server
 def handler(request):
     print(request)
     time.sleep(10)
-    return {"Routes": []}
+    return {
+        "Distance": 0
+    }
 
 
 if __name__ == "__main__":

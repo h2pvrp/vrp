@@ -43,8 +43,8 @@ namespace VrpBackend.WebSockets
             string jsonString = Encoding.UTF8.GetString(buffer, 0, result.Count);
             Case caseModel = JsonSerializer.Deserialize<Case>(jsonString);
             string caseSerialized = JsonSerializer.Serialize(caseModel);
-            byte[] parcelsBuffer = Encoding.UTF8.GetBytes(caseSerialized);
-            await socket.SendAsync(new ArraySegment<byte>(parcelsBuffer, 0, parcelsBuffer.Length), result.MessageType, 
+            byte[] caseBuffer = Encoding.UTF8.GetBytes(caseSerialized);
+            await socket.SendAsync(new ArraySegment<byte>(caseBuffer, 0, caseBuffer.Length), result.MessageType, 
                 result.EndOfMessage, CancellationToken.None);
         }   
     }
@@ -63,21 +63,23 @@ namespace VrpBackend.WebSockets
         public override async Task OnMessage(WebSocket socket, WebSocketReceiveResult result, byte[] buffer)
         {
             string jsonString = Encoding.UTF8.GetString(buffer, 0, result.Count);
-            //TODO save to db
+            // TODO: save to db
             Case caseModel = JsonSerializer.Deserialize<Case>(jsonString);
             string caseSerialized = JsonSerializer.Serialize(caseModel);
-            IEnumerable<Task<Solution>> postTasksQuery = 
+            IEnumerable<Task<Result>> postTasksQuery = 
                 from worker in _workers select _workerService.PostCase(worker, caseSerialized);
-            List<Task<Solution>> postTasks = postTasksQuery.ToList();
+            List<Task<Result>> postTasks = postTasksQuery.ToList();
             while (postTasks.Count > 0)
             {
-                Task<Solution> finishedTask = await Task.WhenAny(postTasks);
+                Task<Result> finishedTask = await Task.WhenAny(postTasks);
                 postTasks.Remove(finishedTask);
-                //TODO save to db
-                Solution solution = await finishedTask; 
-                string solutionSerialized = JsonSerializer.Serialize(solution);
-                byte[] solutionsBuffer = Encoding.UTF8.GetBytes(solutionSerialized);
-                await socket.SendAsync(new ArraySegment<byte>(solutionsBuffer, 0, solutionsBuffer.Length), 
+                // TODO: save to db
+                Result resultModel = await finishedTask;
+                resultModel.Case = caseModel;
+                resultModel.CaseId = caseModel.Id;
+                string resultSerialized = JsonSerializer.Serialize(resultModel);
+                byte[] resultBuffer = Encoding.UTF8.GetBytes(resultSerialized);
+                await socket.SendAsync(new ArraySegment<byte>(resultBuffer, 0, resultBuffer.Length), 
                     result.MessageType, result.EndOfMessage, CancellationToken.None);
             }
         }   

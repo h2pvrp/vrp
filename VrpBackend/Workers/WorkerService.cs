@@ -19,7 +19,7 @@ namespace VrpBackend.Workers
             Client = client;
         }
 
-        public async Task<Solution> PostCase(Worker worker, string jsonString)
+        public async Task<Result> PostCase(Worker worker, string jsonString)
         {
             var response = await Client.PostAsync(
                 worker.Url(), 
@@ -27,10 +27,10 @@ namespace VrpBackend.Workers
             );
             response.EnsureSuccessStatusCode();
             using var responseStream = await response.Content.ReadAsStreamAsync();
-            Solution solution = await JsonSerializer.DeserializeAsync<Solution>(responseStream);
-            solution.Worker = worker;
-            solution.WorkerId = worker.Id;
-            return solution;
+            Result resultModel = await JsonSerializer.DeserializeAsync<Result>(responseStream);
+            resultModel.Worker = worker;
+            resultModel.WorkerId = worker.Id;
+            return resultModel;
         }
     }
 }

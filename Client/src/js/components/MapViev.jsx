@@ -73,15 +73,8 @@ class ConnectedMapViev extends Component {
       Latitude: value.latitude,
       Longitude: value.longitude
     }));
-
-    // example
-    const [Base, ...Points] = formated_packages;
-    const data = {
-      Base,
-      Points,
-      VehicleCount: 5
-    };
-    websocket_send(data);
+    // TODO: change
+    websocket_send({Id: 1});
   }
 
   render() {

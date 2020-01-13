@@ -17,7 +17,7 @@ namespace VrpBackend.Controllers
         private const int _BUFFER_SIZE = 1024 * 4;
         private readonly WorkerService _workerService;
         private readonly WebSocketHandler _webSocketHandler;
-        //TODO from db or config file
+        // TODO: from db or config file
         private readonly List<Worker> _workers = new List<Worker> {
             new Worker() 
             {

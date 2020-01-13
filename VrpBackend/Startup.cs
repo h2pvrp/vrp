@@ -4,14 +4,17 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using VrpBackend.Data;
 using VrpBackend.Models;
 using VrpBackend.Workers;
+using VrpBackend.EntityFramework;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 
 namespace VrpBackend
@@ -52,6 +55,10 @@ namespace VrpBackend
 
             // workers
             services.AddHttpClient<WorkerService>();
+
+            //services.AddEntityFrameworkNpgsql().AddDbContext<WebApiContext>(opt =>
+            //    opt.UseNpgsql(Configuration.GetConnectionString("WebApiConection"), o => o.UseNetTopologySuite()));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -99,5 +106,7 @@ namespace VrpBackend
                 }
             });
         }
+
+        
     }
 }
