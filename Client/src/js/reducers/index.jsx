@@ -1,19 +1,17 @@
 import {
-  ADD_ARTICLE,
   DATA_LOADED,
   API_ERRORED,
 
-  // REDUX_WEBSOCKET_BROKEN,
-  // REDUX_WEBSOCKET_OPEN,
-  // REDUX_WEBSOCKET_CLOSED,
-  // REDUX_WEBSOCKET_MESSAGE,
-  // REDUX_WEBSOCKET_CONNECT,
-  // REDUX_WEBSOCKET_SEND,
-
   ADD_PACKAGE,
   DELETE_PACKAGE,
+  EDIT_PACKAGE,
+  TOGGLE_EDIT_MODE,
+  TOGGLE_DEPO_MODE,
+  ADD_DEPO,
   CENTER_MAP,
-  SELECT_PACKAGE
+  SELECT_PACKAGE,
+  ADD_ROUTE,
+  SET_ROUTE_VISIBILITY,
 } from "../constants/action-types";
 
 import { DEFAULT_PREFIX, WEBSOCKET_MESSAGE } from '@giantmachines/redux-websocket';
@@ -21,8 +19,10 @@ import { DEFAULT_PREFIX, WEBSOCKET_MESSAGE } from '@giantmachines/redux-websocke
 
 const initialState = {
   remoteArticles: [],
-  messages: [],
-  url: null,
+  // messages: [],
+  // url: null,
+
+  map_state: 'add',
 
   map_settings: {
     latitude: 52.22977,
@@ -30,8 +30,11 @@ const initialState = {
     zoom: 13
   },
   packages: [],
+  depo: null,
   selected_package: null,
-  last_deleted_package: null
+  last_deleted_package: null,
+
+  routes: [],
 };
 
 function rootReducer(state = initialState, action) {
@@ -49,76 +52,50 @@ function rootReducer(state = initialState, action) {
         remoteArticles: [API_ERRORED]
       };
 
-    // case 'INTERNAL::CLEAR_MESSAGE_LOG':
-    //   return {
-    //     ...state,
-    //     messages: [],
-    //   };
-
-    // case REDUX_WEBSOCKET_CONNECT:
-    //   console.log('Trynna connect...')
-    //   return {
-    //     ...state,
-    //     url: action.payload.url,
-    //   };
-
-    // case REDUX_WEBSOCKET_OPEN:
-    //   console.log('Aw mane I connected!')
-    //   return {
-    //     ...state,
-    //     connected: true,
-    //   };
-
-    // case REDUX_WEBSOCKET_BROKEN:
-    // case REDUX_WEBSOCKET_CLOSED:
-    //   console.error('Connection broken!', action)
-    //   return {
-    //     ...state,
-    //     connected: false,
-    //   };
-
-    // case REDUX_WEBSOCKET_MESSAGE:
-    //   console.log('You\'ve got mail' , action)
-    //   return {
-    //     ...state,
-    //     messages: [
-    //       ...state.messages,
-    //       {
-    //         data: JSON.parse(action.payload.message),
-    //         origin: action.payload.origin,
-    //         timestamp: action.meta.timestamp,
-    //         type: 'INCOMING',
-    //       },
-    //     ],
-    //   };
-
-    // case REDUX_WEBSOCKET_SEND:
-    //   console.log('Trynna send' , action)
-    //   return {
-    //     ...state,
-    //     messages: [
-    //       ...state.messages,
-    //       {
-    //         data: action.payload,
-    //         origin: window.location.origin,
-    //         timestamp: new Date(),
-    //         type: 'OUTGOING',
-    //       },
-    //     ],
-    //   };
-
     case ADD_PACKAGE:
       return {
         ...state,
-        packages: [...state.packages, action.package]
+        packages: [...state.packages, action.package],
+        selected_package: null,
       };
+
     case DELETE_PACKAGE:
       return {
         ...state,
         packages: state.packages.filter((_, index) => index !== action.index),
         selected_package: (state.selected_package === action.index) ? null : state.selected_package,
-        last_deleted_package: action.index
+        last_deleted_package: action.index,
+        map_state: 'add',
       };
+
+    case TOGGLE_EDIT_MODE:
+      return {
+        ...state,
+        map_state: 'edit',
+      };
+
+    case TOGGLE_DEPO_MODE:
+      return {
+        ...state,
+        map_state: 'depo',
+      };
+
+    case ADD_DEPO:
+      return {
+        ...state,
+        depo: action.depo,
+        map_state: 'add',
+      }
+
+    case EDIT_PACKAGE:
+      const after_edit = [...state.packages];
+      after_edit[state.selected_package] = action.package;
+      return {
+        ...state,
+        map_state: 'add',
+        packages: after_edit,
+      };
+
     case CENTER_MAP:
       if (state.last_deleted_package === null)
         return {
@@ -132,14 +109,31 @@ function rootReducer(state = initialState, action) {
       else
         return {
           ...state,
-          last_deleted_package: null
+          last_deleted_package: null,
         };
+
     case SELECT_PACKAGE:
       return {
         ...state,
         selected_package: action.index,
         last_deleted_package: null
       };
+
+    case ADD_ROUTE:
+      console.log(action);
+      return {
+        ...state,
+        routes: [...state.routes, action.route]
+      }
+
+    case SET_ROUTE_VISIBILITY:
+      const updatedRoutes = [...state.routes];
+      updatedRoutes[action.index].hidden = action.isVisible;
+      return {
+        ...state,
+        routes: updatedRoutes,
+      }
+
     case `${DEFAULT_PREFIX}::${WEBSOCKET_MESSAGE}`:
       const payload = JSON.parse(action.payload.message);
       console.log(payload);
