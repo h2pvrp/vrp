@@ -8,9 +8,11 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using VrpBackend.Data;
 using VrpBackend.Models;
+using VrpBackend.Workers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
 
 namespace VrpBackend
 {
@@ -47,6 +49,9 @@ namespace VrpBackend
             {
                 configuration.RootPath = "../Client/build";
             });
+
+            // workers
+            services.AddHttpClient<DummyWorker>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,6 +78,8 @@ namespace VrpBackend
             app.UseAuthentication();
             app.UseIdentityServer();
             app.UseAuthorization();
+
+            app.UseWebSockets();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -80,12 +87,7 @@ namespace VrpBackend
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
-//<<<<<<< feature/frontend
-//            app.MapWebSockets("/ws", new JsonEchoHandler());
-//=======
-
-            app.UseWebSockets();
-            app.MapWebSockets("/ws", new EchoHandler());
+            //app.MapWebSockets("/ws", new JsonEchoHandler());
 
             app.UseSpa(spa =>
             {
@@ -96,7 +98,6 @@ namespace VrpBackend
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
-//>>>>>>> master
         }
     }
 }
