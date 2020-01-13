@@ -22,11 +22,20 @@ namespace VrpBackend.Controllers
             new Worker() 
             {
                 Id = 1,
-                Name = "Dummy",
-                Active = true,
-                Host = "http://localhost",
+                Name = "Dumm",
                 Port = 5005,
-                Endpoint = "/"
+            },
+            new Worker() 
+            {
+                Id = 2,
+                Name = "Dumm 2",
+                Port = 5006,
+            },
+            new Worker() 
+            {
+                Id = 3,
+                Name = "Dummy 3",
+                Port = 5007,
             }
         };
 
