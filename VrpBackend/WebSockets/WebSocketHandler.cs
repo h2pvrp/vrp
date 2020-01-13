@@ -51,11 +51,15 @@ namespace VrpBackend.WebSockets
 
     public class JsonWorkersHandler: WebSocketHandler
     {
-        private readonly List<WorkerService> _workerServices;
-        public JsonWorkersHandler(List<WorkerService> workerServices)
+        private readonly WorkerService _workerService;
+        private readonly List<Worker> _workers;
+
+        public JsonWorkersHandler(WorkerService workerService, List<Worker> workers)
         {
-            _workerServices = workerServices;
+            _workerService = workerService;
+            _workers = workers;
         }
+
         public override async Task OnMessage(WebSocket socket, WebSocketReceiveResult result, byte[] buffer)
         {
             string jsonString = Encoding.UTF8.GetString(buffer, 0, result.Count);
@@ -63,7 +67,7 @@ namespace VrpBackend.WebSockets
             Case caseModel = JsonSerializer.Deserialize<Case>(jsonString);
             string caseSerialized = JsonSerializer.Serialize(caseModel);
             IEnumerable<Task<Solution>> postTasksQuery = 
-                from worker in _workerServices select worker.PostCase(caseSerialized);
+                from worker in _workers select _workerService.PostCase(worker, caseSerialized);
             List<Task<Solution>> postTasks = postTasksQuery.ToList();
             while (postTasks.Count > 0)
             {

@@ -9,28 +9,28 @@ using VrpBackend.Models;
 
 namespace VrpBackend.Workers
 {
-    public abstract class WorkerService 
+    public class WorkerService 
     {
         public HttpClient Client { get; }
-        public string PostEndpoint => "/";
-        public abstract string Url { get; }
-        
+
         public WorkerService(HttpClient client) 
         {
-            client.BaseAddress = new Uri(Url);
             client.DefaultRequestHeaders.Add("Accept", "application/json");
             Client = client;
         }
 
-        public async Task<Solution> PostCase(string jsonString)
+        public async Task<Solution> PostCase(Worker worker, string jsonString)
         {
             var response = await Client.PostAsync(
-                PostEndpoint, 
+                worker.Url(), 
                 new StringContent(jsonString, Encoding.UTF8, "application/json")
             );
             response.EnsureSuccessStatusCode();
             using var responseStream = await response.Content.ReadAsStreamAsync();
-            return await JsonSerializer.DeserializeAsync<Solution>(responseStream);
+            Solution solution = await JsonSerializer.DeserializeAsync<Solution>(responseStream);
+            solution.Worker = worker;
+            solution.WorkerId = worker.Id;
+            return solution;
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using VrpBackend.Workers;
 using VrpBackend.WebSockets;
+using VrpBackend.Models;
 
 
 namespace VrpBackend.Controllers 
@@ -14,13 +15,25 @@ namespace VrpBackend.Controllers
     public  class WebSocketController: Controller 
     {
         private const int _BUFFER_SIZE = 1024 * 4;
-        private readonly List<WorkerService> _workerServices;
+        private readonly WorkerService _workerService;
         private readonly WebSocketHandler _webSocketHandler;
+        //TODO from db or config file
+        private readonly List<Worker> _workers = new List<Worker> {
+            new Worker() 
+            {
+                Id = 1,
+                Name = "Dummy",
+                Active = true,
+                Host = "http://localhost",
+                Port = 5005,
+                Endpoint = "/"
+            }
+        };
 
-        public WebSocketController(DummyWorker testWorker)
+        public WebSocketController(WorkerService workerService)
         {
-            _workerServices = new List<WorkerService>{testWorker};
-            _webSocketHandler = new JsonWorkersHandler(_workerServices);
+            _workerService = workerService;
+            _webSocketHandler = new JsonWorkersHandler(_workerService, _workers);
         }
 
         [HttpGet]

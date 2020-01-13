@@ -9,5 +9,7 @@ namespace VrpBackend.Models
         public Point Base { get; set; }
         public int VehicleCount { get; set; }
         public List<Point> Points { get; set; }
+
+        public List<Solution> Solutions { get; set; }
     }
 }
