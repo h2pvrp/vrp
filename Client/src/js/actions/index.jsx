@@ -10,6 +10,7 @@ import {
   TOGGLE_DEPO_MODE,
   ADD_DEPO,
   SET_ROUTE_VISIBILITY,
+  ADD_ROUTE,
 } from "../constants/action-types";
 
 export const getData = () => ({ type: DATA_REQUESTED });
@@ -65,3 +66,8 @@ export const set_route_visibility = (index, isVisible) => ({
   index,
   isVisible,
 });
+
+export const add_route = (route) => ({
+  type: ADD_ROUTE,
+  route
+})

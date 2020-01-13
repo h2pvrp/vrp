@@ -24,3 +24,4 @@ export const TOGGLE_EDIT_MODE = "TOGGLE_EDIT_MODE";
 export const TOGGLE_DEPO_MODE = "TOGGLE_DEPO_MODE";
 export const ADD_DEPO = "ADD_DEPO";
 export const SET_ROUTE_VISIBILITY = "SET_ROUTE_VISIBILITY";
+export const ADD_ROUTE = "ADD_ROUTE";
