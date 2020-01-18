@@ -9,8 +9,10 @@ using System.Text;
 using System.Text.Json;
 using System.Collections.Generic;
 using System.Linq;
+using NetTopologySuite.Geometries;
 
 using VrpBackend.Models;
+using VrpBackend.Serialization;
 using VrpBackend.Workers;
 
 
@@ -63,9 +65,9 @@ namespace VrpBackend.WebSockets
         public override async Task OnMessage(WebSocket socket, WebSocketReceiveResult result, byte[] buffer)
         {
             string jsonString = Encoding.UTF8.GetString(buffer, 0, result.Count);
-            // TODO: save to db
-            Case caseModel = JsonSerializer.Deserialize<Case>(jsonString);
-            string caseSerialized = JsonSerializer.Serialize(caseModel);
+            Case caseModel = JsonSerializer.Deserialize<CaseData>(jsonString).ToModel();
+
+            string caseSerialized = JsonSerializer.Serialize(new CaseData(caseModel));
             IEnumerable<Task<Result>> postTasksQuery = 
                 from worker in _workers select _workerService.PostCase(worker, caseSerialized);
             List<Task<Result>> postTasks = postTasksQuery.ToList();
@@ -73,11 +75,10 @@ namespace VrpBackend.WebSockets
             {
                 Task<Result> finishedTask = await Task.WhenAny(postTasks);
                 postTasks.Remove(finishedTask);
-                // TODO: save to db
                 Result resultModel = await finishedTask;
                 resultModel.Case = caseModel;
                 resultModel.CaseId = caseModel.Id;
-                string resultSerialized = JsonSerializer.Serialize(resultModel);
+                string resultSerialized = JsonSerializer.Serialize(new ResultData(resultModel));
                 byte[] resultBuffer = Encoding.UTF8.GetBytes(resultSerialized);
                 await socket.SendAsync(new ArraySegment<byte>(resultBuffer, 0, resultBuffer.Length), 
                     result.MessageType, result.EndOfMessage, CancellationToken.None);

@@ -143,7 +143,15 @@ class ConnectedMapViev extends Component {
       Longitude: value.longitude
     }));
     // TODO: change
-    websocket_send({Id: 1});
+    websocket_send({
+      VehicleCount: 3,
+      Points: [
+        [52.25019000601295, 20.993360043428115],
+        [52.23852308138769, 20.96965659670597],
+        [52.20855341292023, 20.972404822412894],
+      ],
+      Base: [52.25019000601295, 20.993360043428115]
+    });
   }
 
   render() {

@@ -4,7 +4,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Text;
 using System.Text.Json;
+
 using VrpBackend.Models;
+using VrpBackend.Serialization;
 
 
 namespace VrpBackend.Workers
@@ -27,7 +29,8 @@ namespace VrpBackend.Workers
             );
             response.EnsureSuccessStatusCode();
             using var responseStream = await response.Content.ReadAsStreamAsync();
-            Result resultModel = await JsonSerializer.DeserializeAsync<Result>(responseStream);
+            ResultData resultDataModel = await JsonSerializer.DeserializeAsync<ResultData>(responseStream);
+            Result resultModel = resultDataModel.ToModel();
             resultModel.Worker = worker;
             resultModel.WorkerId = worker.Id;
             return resultModel;
