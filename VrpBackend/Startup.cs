@@ -4,13 +4,18 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using VrpBackend.Data;
 using VrpBackend.Models;
+using VrpBackend.Workers;
+using VrpBackend.EntityFramework;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+
 
 namespace VrpBackend
 {
@@ -47,6 +52,13 @@ namespace VrpBackend
             {
                 configuration.RootPath = "../Client/build";
             });
+
+            // workers
+            services.AddHttpClient<WorkerService>();
+
+            //services.AddEntityFrameworkNpgsql().AddDbContext<WebApiContext>(opt =>
+            //    opt.UseNpgsql(Configuration.GetConnectionString("WebApiConection"), o => o.UseNetTopologySuite()));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,6 +85,8 @@ namespace VrpBackend
             app.UseAuthentication();
             app.UseIdentityServer();
             app.UseAuthorization();
+
+            app.UseWebSockets();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -80,12 +94,7 @@ namespace VrpBackend
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
-//<<<<<<< feature/frontend
-//            app.MapWebSockets("/ws", new JsonEchoHandler());
-//=======
-
-            app.UseWebSockets();
-            app.MapWebSockets("/ws", new EchoHandler());
+            //app.MapWebSockets("/ws", new JsonEchoHandler());
 
             app.UseSpa(spa =>
             {
@@ -96,7 +105,8 @@ namespace VrpBackend
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
-//>>>>>>> master
         }
+
+        
     }
 }
