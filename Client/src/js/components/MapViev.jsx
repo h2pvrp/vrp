@@ -137,20 +137,37 @@ class ConnectedMapViev extends Component {
   }
 
   onSendClick(event) {
-    const { websocket_send, packages } = this.props;
-    const formated_packages = packages.map(value => ({
-      Latitude: value.latitude,
-      Longitude: value.longitude
-    }));
-    // TODO: change
+    const { websocket_send, packages, depo } = this.props;
+    const vehicleCount = Number(document.querySelector('#v_num').value);
+
+    let flag = false;
+
+    if(packages.length < 1) {
+      console.error('No packages selected!');
+      flag = true;
+    }
+
+    if(!depo) {
+      console.error('Depo not selected!');
+      flag = true;
+    }
+
+    if(!vehicleCount) {
+      console.error('Bad vehicle count!');
+      flag = true;
+    }
+
+    if (flag) {
+      return;
+    }
+
+    const formated_packages = packages.map(value => [value.latitude, value.longitude]);
+    console.log(vehicleCount);
+
     websocket_send({
-      VehicleCount: 3,
-      Points: [
-        [52.25019000601295, 20.993360043428115],
-        [52.23852308138769, 20.96965659670597],
-        [52.20855341292023, 20.972404822412894],
-      ],
-      Base: [52.25019000601295, 20.993360043428115]
+      VehicleCount: vehicleCount,
+      Points: formated_packages,
+      Base: [depo.latitude, depo.longitude],
     });
   }
 
