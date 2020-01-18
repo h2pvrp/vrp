@@ -10,8 +10,8 @@ import {
   ADD_DEPO,
   CENTER_MAP,
   SELECT_PACKAGE,
-  ADD_ROUTE,
-  SET_ROUTE_VISIBILITY,
+  ADD_RESULT,
+  SET_RESULT_VISIBILITY,
 } from "../constants/action-types";
 
 import { DEFAULT_PREFIX, WEBSOCKET_MESSAGE } from '@giantmachines/redux-websocket';
@@ -34,10 +34,11 @@ const initialState = {
   selected_package: null,
   last_deleted_package: null,
 
-  routes: [],
+  results: [],
 };
 
 function rootReducer(state = initialState, action) {
+  console.log(action);
   switch(action.type) {
 
     case DATA_LOADED:
@@ -119,25 +120,44 @@ function rootReducer(state = initialState, action) {
         last_deleted_package: null
       };
 
-    case ADD_ROUTE:
-      console.log(action);
+    case ADD_RESULT:
+    console.log(ADD_RESULT)
       return {
         ...state,
-        routes: [...state.routes, action.route]
+        results: [...state.results, action.result]
       }
 
-    case SET_ROUTE_VISIBILITY:
-      const updatedRoutes = [...state.routes];
-      updatedRoutes[action.index].hidden = action.isVisible;
+    case SET_RESULT_VISIBILITY:
+      const updatedResults = [...state.results];
+      updatedResults[action.index].hidden = action.isVisible;
       return {
         ...state,
-        routes: updatedRoutes,
+        results: updatedResults,
       }
 
     case `${DEFAULT_PREFIX}::${WEBSOCKET_MESSAGE}`:
       const payload = JSON.parse(action.payload.message);
       console.log(payload);
-      return state;
+      // temporary solution
+      const colors = ["#3388ff", "#ff8833", "#ff3388"];
+      const result = {
+        routes: [
+          ...payload.Routes
+        ],
+        worker: payload.Worker,
+        workerId: payload.WorkerId,
+        hidden: false,
+        color: colors[state.results.length % colors.length],
+        name: payload.Worker.Name,
+      };
+      console.log(result);
+
+
+
+      return {
+        ...state,
+        results: [...state.results, result]
+      };
 
     default:
       // console.log('unknown action', action);

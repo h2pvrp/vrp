@@ -9,8 +9,8 @@ import {
   SELECT_PACKAGE,
   TOGGLE_DEPO_MODE,
   ADD_DEPO,
-  SET_ROUTE_VISIBILITY,
-  ADD_ROUTE,
+  SET_RESULT_VISIBILITY,
+  ADD_RESULT,
 } from "../constants/action-types";
 
 export const getData = () => ({ type: DATA_REQUESTED });
@@ -61,13 +61,13 @@ export const add_depo = (latitude, longitude) => ({
   },
 });
 
-export const set_route_visibility = (index, isVisible) => ({
-  type: SET_ROUTE_VISIBILITY,
+export const set_result_visibility = (index, isVisible) => ({
+  type: SET_RESULT_VISIBILITY,
   index,
   isVisible,
 });
 
-export const add_route = (route) => ({
-  type: ADD_ROUTE,
-  route
+export const add_result = (result) => ({
+  type: ADD_RESULT,
+  result
 })
