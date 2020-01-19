@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -10,9 +11,10 @@ using VrpBackend.EntityFramework;
 namespace VrpBackend.Migrations
 {
     [DbContext(typeof(WebApiContext))]
-    partial class WebApiContextModelSnapshot : ModelSnapshot
+    [Migration("20200119151610_UniqueAndColors")]
+    partial class UniqueAndColors
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,6 +35,9 @@ namespace VrpBackend.Migrations
 
                     b.Property<string>("Color")
                         .HasColumnType("text");
+
+                    b.Property<double>("ComputationTime")
+                        .HasColumnType("double precision");
 
                     b.Property<MultiPoint>("Points")
                         .HasColumnType("geometry");
@@ -63,18 +68,6 @@ namespace VrpBackend.Migrations
 
                     b.Property<string>("Color")
                         .HasColumnType("text");
-
-                    b.Property<double>("CombinedLength")
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("ComputationTime")
-                        .HasColumnType("double precision");
-
-                    b.Property<LineString>("LongestRoute")
-                        .HasColumnType("geometry");
-
-                    b.Property<int>("NumberOfRoutes")
-                        .HasColumnType("integer");
 
                     b.Property<MultiLineString>("Routes")
                         .HasColumnType("geometry");

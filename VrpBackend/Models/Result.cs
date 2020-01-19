@@ -10,9 +10,15 @@ namespace VrpBackend.Models
     {
         public long Id { get; set; }
         public MultiLineString Routes { get; set; }
+        public string Color { get; set; }
         public long WorkerId { get; set; }
         
         // TODO: Stats JSON
         public Worker Worker { get; set; }
+        public double ComputationTime { get; set; }
+        public double CombinedLength { get; set; }
+        public LineString LongestRoute { get; set; }
+        public int NumberOfRoutes { get; set; }
+
     }
 }

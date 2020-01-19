@@ -14,6 +14,7 @@ namespace VrpBackend.Models
         public long UserId { get; set; }
         public MultiPoint Points { get; set; }
         public Point Base { get; set; }
+        public string Color { get; set; }
         public long[] Results { get; set; }
     }
 }
