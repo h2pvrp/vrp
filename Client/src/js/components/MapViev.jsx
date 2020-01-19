@@ -13,7 +13,7 @@ import {
   toggle_edit_mode,
   toggle_depo_mode,
   add_depo,
-  set_route_visibility,
+  set_result_visibility,
 } from '../actions'
 import { ATTRIBUTION, MAP_URL } from '../constants/config'
 import 'leaflet/dist/leaflet.css';
@@ -46,7 +46,7 @@ const mapStateToProps = state => ({
   map_state: state.map_state,
   depo: state.depo,
   selected_package: state.selected_package,
-  routes: state.routes,
+  results: state.results,
   depoWrapper: state.depo ? [state.depo] : [],
 })
 
@@ -60,7 +60,7 @@ const mapDispatchToProps = dispatch => ({
   center_map: index => dispatch(center_map(index)),
   select_package: index => dispatch(select_package(index)),
   websocket_send: data => dispatch(send(data)),
-  set_route_visibility: (index, isVisible) => dispatch(set_route_visibility(index, isVisible)),
+  set_result_visibility: (index, isVisible) => dispatch(set_result_visibility(index, isVisible)),
 });
 
 class ConnectedMapViev extends Component {
@@ -131,32 +131,60 @@ class ConnectedMapViev extends Component {
 
   onCheckboxChange(index) {
     return event => {
-      const { set_route_visibility } = this.props;
-      set_route_visibility(index, event.target.checked);
+      const { set_result_visibility } = this.props;
+      set_result_visibility(index, event.target.checked);
     }
   }
 
   onSendClick(event) {
-    const { websocket_send, packages } = this.props;
-    const formated_packages = packages.map(value => ({
-      Latitude: value.latitude,
-      Longitude: value.longitude
-    }));
-    // TODO: change
+    const { websocket_send, packages, depo } = this.props;
+    const vehicleCount = Number(document.querySelector('#v_num').value);
+
+    let flag = false;
+
+    if(packages.length < 1) {
+      console.error('No packages selected!');
+      flag = true;
+    }
+
+    if(!depo) {
+      console.error('Depo not selected!');
+      flag = true;
+    }
+
+    if(!vehicleCount) {
+      console.error('Bad vehicle count!');
+      flag = true;
+    }
+
+    if (flag) {
+      return;
+    }
+
+    const formated_packages = packages.map(value => [value.latitude, value.longitude]);
+    console.log(vehicleCount);
+
     websocket_send({
-      VehicleCount: 3,
-      Points: [
-        [52.25019000601295, 20.993360043428115],
-        [52.23852308138769, 20.96965659670597],
-        [52.20855341292023, 20.972404822412894],
-      ],
-      Base: [52.25019000601295, 20.993360043428115]
+      VehicleCount: vehicleCount,
+      Points: formated_packages,
+      Base: [depo.latitude, depo.longitude],
     });
   }
 
   render() {
-    const { latitude, longitude, zoom, packages, selected_package, depo, routes, depoWrapper } = this.props;
+    const { latitude, longitude, zoom, packages, selected_package, depo, results, depoWrapper } = this.props;
     const position = [latitude, longitude];
+
+
+    const routes = results.filter((result) => !result.hidden).reduce(
+      (acc, val) => {
+        console.log(val);
+        const color = val.color;
+        const wrappedRoutes = val.routes.map((r, i) => ({polyline: r, key: i, color}));
+        return [...acc, ...wrappedRoutes];
+      }, []
+      );
+    console.log('rrr', routes);
 
     return (
       <Row>
@@ -177,9 +205,9 @@ class ConnectedMapViev extends Component {
               );
             })}
 
-            {routes.filter((route) => !route.hidden).map((value, index) => {
-              return (
-                <Polyline key={index} positions={value.polyline} color={value.color} />
+            {routes.map((route, index) => {
+                return (
+                  <Polyline key={index} positions={route.polyline} color={route.color}/>
                 )
             })}
 
@@ -209,8 +237,9 @@ class ConnectedMapViev extends Component {
 
           <Button className="w-100" variant="success" onClick={this.onSendClick}>Send</Button>
 
-          <h3>Routes</h3>
-          {routes.map((value, index) => {
+          <h3>Results</h3>
+          {results.map((value, index) => {
+            console.log(value, index);
             return (
               <div key={index} className="form-group form-check">
                 <input type="checkbox" className="form-check-input" id={index} key={index} onChange={this.onCheckboxChange(index)}></input>
