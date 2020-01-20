@@ -10,10 +10,12 @@ namespace VrpBackend.Models
     public class Result
     {
         public long Id { get; set; }
-        public decimal Distance { get; set; }
         public MultiLineString Routes { get; set; }
-        
-        // TODO: Stats JSON
+        public double ComputationTime { get; set; }
+        public double CombinedLength { get; set; }
+        public double LongestRouteLength { get; set; }
+        public double LongestRouteTime { get; set; }
+        public int NumberOfRoutes { get; set; }
 
         public long CaseId { get; set; }
         public Case Case { get; set; }

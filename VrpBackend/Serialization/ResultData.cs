@@ -8,21 +8,31 @@ namespace VrpBackend.Serialization
     public class ResultData: ModelData<Result>
     {
         public long Id { get; set; }
-        public decimal Distance { get; set; }
-        public List<List<double[]>> Routes { get; set; }
+        public List<List<double[]>> Routes { get; set; }        
+        public double ComputationTime { get; set; }
+        public double CombinedLength { get; set; }
+        public double LongestRouteLength { get; set; }
+        public double LongestRouteTime { get; set; }
+        public int NumberOfRoutes { get; set; }
+
         public long WorkerId { get; set; }
         public Worker Worker { get; set; }
-
+        public long CaseId { get; set; }
         public ResultData()
         {}
 
         public ResultData(Result result)
         {
             Id = result.Id;
-            Distance = result.Distance;
             Routes = MultiLineStringSerialize(result.Routes);
+            ComputationTime = result.ComputationTime;
+            CombinedLength = result.CombinedLength;
+            LongestRouteLength = result.LongestRouteLength;
+            LongestRouteTime = result.LongestRouteTime;
+            NumberOfRoutes = result.NumberOfRoutes;
             WorkerId = result.WorkerId;
             Worker = result.Worker;
+            CaseId = result.CaseId;
         }
 
         public override Result ToModel()
@@ -30,10 +40,15 @@ namespace VrpBackend.Serialization
             return new Result()
             {
                 Id = this.Id,
-                Distance = this.Distance,
                 Routes = MultiLineStringFactory(this.Routes),
+                ComputationTime = this.ComputationTime,
+                CombinedLength = this.CombinedLength,
+                LongestRouteLength = this.LongestRouteLength,
+                LongestRouteTime = this.LongestRouteTime,
+                NumberOfRoutes = this.NumberOfRoutes,
                 WorkerId = this.WorkerId,
-                Worker = this.Worker
+                Worker = this.Worker,
+                CaseId = this.CaseId,
             };
         }
     }

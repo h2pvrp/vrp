@@ -24,22 +24,17 @@ namespace VrpBackend.Controllers
                 Id = 1,
                 Name = "or-tools Distance",
                 Port = 5005,
+                Host = "http://localhost",
+                Endpoint = "/"
             },
-            
             new Worker() 
             {
                 Id = 2,
                 Name = "or-tools Duration",
                 Port = 5006,
+                Host = "http://localhost",
+                Endpoint = "/"
             },
-            /*
-            new Worker() 
-            {
-                Id = 3,
-                Name = "Dummy 3",
-                Port = 5007,
-            }
-            */
         };
 
         public WebSocketController(WorkerService workerService)

@@ -12,7 +12,6 @@ namespace VrpBackend.Serialization
         public int VehicleCount { get; set; }
         public List<double[]> Points { get; set; }
         public double[] Base { get; set; }
-        public DateTime Timestamp { get; set; }
 
         public CaseData()
         {}
@@ -23,7 +22,6 @@ namespace VrpBackend.Serialization
             VehicleCount = c.VehicleCount;
             Points = MultiPointSerialize(c.Points);
             Base = PointSerialize(c.Base);
-            Timestamp = this.Timestamp;
         }
 
         public override Case ToModel()
@@ -33,8 +31,7 @@ namespace VrpBackend.Serialization
                 Id = this.Id,
                 VehicleCount = this.VehicleCount,
                 Points = MultiPointFactory(this.Points),
-                Base = PointFactory(this.Base),
-                Timestamp = this.Timestamp
+                Base = PointFactory(this.Base)
             };
         }
     }
