@@ -127,7 +127,15 @@ function rootReducer(state = initialState, action) {
       const payload = JSON.parse(action.payload.message);
       console.log('Payload:', payload);
       // temporary solution
-      const colors = ["#3388ff", "#ff8833", "#ff3388"];
+      // const colors = ["#3388ff", "#ff8833", "#ff3388"];
+
+      const colors = [
+        ["#fb6311","#f9403b","#e52858","#b62c69","#982e69"],
+        ["#71c7a4","#4fa19a","#3c7889","#40698c","#394d8e"],
+        ["#f6bcd8","#ed8ad8","#cc6ad5","#8d59b5","#442599"],
+      ];
+
+
       const result = {
         routes: [
           ...payload.Routes
@@ -135,13 +143,13 @@ function rootReducer(state = initialState, action) {
         worker: payload.Worker,
         workerId: payload.WorkerId,
         hidden: false,
-        color: payload.Color || colors[state.results.length % colors.length],
+        colors: payload.Color || colors[state.results.length % colors.length],
         name: payload.Worker.Name,
-        computationTime: payload.ComputationTime,
-        combinedLength: payload.CombinedLength,
-        longestRouteLength: payload.LongestRouteLength,
-        longestRouteTime: payload.LongestRouteTime,
-        averageRoute: payload.CombinedLength / payload.NumberOfRoutes,
+        computationTime: Math.round(payload.ComputationTime / 1000 * 100) / 100,
+        combinedLength: Math.round(payload.CombinedLength / 1000 * 100) / 100,
+        longestRouteLength: Math.round(payload.LongestRouteLength / 1000 * 100) / 100,
+        longestRouteTime: Math.round(payload.LongestRouteTime / 60 * 100) / 100,
+        averageRoute: Math.round(payload.CombinedLength / payload.NumberOfRoutes / 1000 * 100) / 100,
       };
       console.log('result:', result);
 

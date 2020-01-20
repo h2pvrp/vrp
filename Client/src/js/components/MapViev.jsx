@@ -172,8 +172,8 @@ class ConnectedMapViev extends Component {
 
     const routes = results.filter((result) => !result.hidden).reduce(
       (acc, val) => {
-        const color = val.color;
-        const wrappedRoutes = val.routes.map((r, i) => ({polyline: r, key: i, color}));
+        const colors = val.colors;
+        const wrappedRoutes = val.routes.map((r, i) => ({polyline: r, key: i, color: colors[i]}));
         return [...acc, ...wrappedRoutes];
       }, []
       );
