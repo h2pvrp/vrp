@@ -1,5 +1,0 @@
-aiohttp>=3.6.2
-
-# aioworker==1.0.0
-https://github.com/h2pvrp/aioworker/archive/v1.0.0.tar.gz
-

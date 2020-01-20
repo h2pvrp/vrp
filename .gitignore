@@ -22,3 +22,5 @@ yarn-error.log*
 .vs/
 
 .env/
+osrm_data/
+.python-version
