@@ -126,10 +126,21 @@ Aplikacja webowa ASP.NET Core 3.1 komunikująca się z aplikacją frontendową z
 Klasa WorkerService wysyła na endpoint danego workera request protokułu HTTP zawierający instancję problemu do rozwiązania i oczekuje odpowiedzi w formacie JSON.
 Aby dodać nową instancję workera, którą aplikacja może obsługiwać należy wprowadzić jej dane do bazy danych tak aby serwer miał dostęp do endpoitu oraz skonfigurować workera tak żeby mógł przyjmować requesty z danymi od serwera niezależnie od implementacji.
 
+Model danych wysyłany do workera:
+```
+{
+  "Id" : 1,
+  "VehicleCount" : 3,
+  "Points" : [obiekt typu MultiPoint],
+  "Base" : [obiekt typu Point]
+}
+```
+
 ## Baza danych
 
 Dane są składowane w bazie danych Postgres z rozszerzeniem Postgis umożliwiającym zapisywanie danych geograficznych. Baza danych składa się z następujących tabel:
 
+* ApplicationUser - użytkownicy aplikacji
 * Cases - zawierającą problemy VRP wprowadzone przez użytkowników
 * Results - zawierającej wyniki określonych problemów
 * Workers - zawierającej znane instancje workerów rozwiązujących problem VPR
@@ -218,7 +229,7 @@ python worker.py
 
 # Instrukcja użytkownika
 
-1.  Użytkownik może zalogować się do aplikacji za pomocą zakładki "Login". Zalogowany użytkownik może wyświetlać historię wprowadzonych przez siebie problemów i ich rozwiązań.
+1.  Użytkownik korzystający z aplikacji po raz pierwszy zakłada konto korzystając z zakładki "Register", następnie może zalogować się do aplikacji za pomocą zakładki "Login". Zalogowany użytkownik może wyświetlać historię wprowadzonych przez siebie problemów i ich rozwiązań.
 
 2.  Aby stworzyć instancję problemu należy nanieść na mapie punkty będące przystankami w problemie VRP. Punkty dodawane są poprzez kliknięcie na mapę, dodane punkty wyświetlane są na mapie w postaci znaczników w kolorze niebieskim i w postaci listy po prawej stronie panelu użytkownika. Z poziomu listy możliwa jest edycja lub usunięcie wybranego punktu.
 
@@ -228,6 +239,6 @@ python worker.py
 Rozwiązania problemu wyświetlane są poniżej mapy.
 
 
-# Wnioski
+## Wnioski
 
 Implementacja workerów w języku python ułatwiła nam pracę ze względu na to, że nie jest to język silnie typowany. Programowanie współbierzne przysporzyło nam dużo problemów.
