@@ -156,7 +156,7 @@ pozostałe pakiety dostarczane są wraz z aplikacją.
 
 Instalacja oprogramowania składa się z dwóch części – instalacji aplikacji webowej oraz aplikacji bazodanowej.
 
-### Instalacja aplikacji webowej
+### 1.  Instalacja aplikacji webowej
 
 1.	Rozpakowujemy archiwum z plikami do wybranego katalogu
 2.	Uruchamiany wiersz poleceń i przechodzimy do wybranego wcześniej katalogu
@@ -164,17 +164,46 @@ Instalacja oprogramowania składa się z dwóch części – instalacji aplikacj
     serve build
 4.	 Aplikacja webowa gotowa jest do użycia pod adresem wskazanym w wierszu poleceń
 
+### 2.  Instalacja aplikacji serwerowej
+
+---
+
+### 3.  Instrukcja kreacji workera
+
+1. Zainstalowac dockera
+2. Zainstalowac OSM Backend
+2.1 Pobrac mapy,
+    recznie:
+        http://download.geofabrik.de/europe/poland/mazowieckie-latest.osm.pbf
+    lub za pomoca wget:
+        wget http://download.geofabrik.de/europe/poland/mazowieckie-latest.osm.pbf
+2.2 Wykonac polecenia w katalogu z pobrana mapa:
+    docker run -t -v "${PWD}:/data" osrm/osrm-backend osrm-extract -p /opt/car.lua /data/mazowieckie-latest.osm.pbf
+    docker run -t -v "${PWD}:/data" osrm/osrm-backend osrm-partition /data/mazowieckie-latest.osrm
+    docker run -t -v "${PWD}:/data" osrm/osrm-backend osrm-customize /data/mazowieckie-latest.osrm
+    docker run -t -i -p 5010:5000 -v "${PWD}:/data" osrm/osrm-backend osrm-routed /data/mazowieckie-latest.osrm
+2.3 Help:
+    https://hub.docker.com/r/osrm/osrm-backend/
+3. Zainstalowac pyenv (instalacja i konfiguracja .bashrc):
+    https://realpython.com/intro-to-pyenv/
+3.1 Instalacja Pythona 3.7.6:
+    pyenv install 3.7.6
+4. W katalogu z workerem zmienic ewentualnie parametry w settings.json
+5. W katalogu z workerem wykonac:
+    pyenv virtualenv 3.7.6 <nazwa_srodowiska>
+    pyenv local <nazwa_srodowiska>
+    pip install -r requirements.txt
+    python worker.py
 
 # Instrukcja użytkownika
 
-Użytkownik może zalogować się do aplikacji za pomocą zakładki "Login". Zalogowany użytkownik może wyświetlać historię wprowadzonych przez siebie problemów i ich rozwiązań.
+1.  Użytkownik może zalogować się do aplikacji za pomocą zakładki "Login". Zalogowany użytkownik może wyświetlać historię wprowadzonych przez siebie problemów i ich rozwiązań.
 
-Aby stworzyć instancję problemu należy nanieść na mapie punkty będące przystankami w problemie VRP. Punkty dodawane są poprzez kliknięcie na mapę, dodane punkty wyświetlane są na mapie w postaci znaczników w kolorze niebieskim i w postaci listy po prawej stronie panelu użytkownika. Z poziomu listy możliwa jest edycja lub usunięcie wybranego punktu.
+2.  Aby stworzyć instancję problemu należy nanieść na mapie punkty będące przystankami w problemie VRP. Punkty dodawane są poprzez kliknięcie na mapę, dodane punkty wyświetlane są na mapie w postaci znaczników w kolorze niebieskim i w postaci listy po prawej stronie panelu użytkownika. Z poziomu listy możliwa jest edycja lub usunięcie wybranego punktu.
 
-Za pomocą przycisku "Select depo" użytkownik może wybrać bazę w problemie VRP. Po kliknięciu na mapę baza wyświetlana jest w postaci białego znacznika.
+3.  Za pomocą przycisku "Select depo" użytkownik może wybrać bazę w problemie VRP. Po kliknięciu na mapę baza wyświetlana jest w postaci białego znacznika.
 
-Wysłanie kompletnego problemu realizowane jest przez wciśnięcie przycisku "Send".
-
+4.  Wysłanie kompletnego problemu realizowane jest przez wciśnięcie przycisku "Send".
 Rozwiązania problemu wyświetlane są poniżej mapy.
 
 
