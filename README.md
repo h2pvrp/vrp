@@ -129,10 +129,26 @@ Aby dodać nową instancję workera, którą aplikacja może obsługiwać należ
 Model danych wysyłany do workera:
 ```
 {
-  "Id" : 1,
-  "VehicleCount" : 3,
-  "Points" : [obiekt typu MultiPoint],
-  "Base" : [obiekt typu Point]
+  "Id" : [int],
+  "VehicleCount" : [int],
+  "Points" : [MultiPoint],
+  "Base" : [Point]
+}
+```
+
+Model danych zwracany przez workera:
+```
+{
+  "Id" : [int],
+  "Routes" : [MultiLineString],
+  "ComputationTime" : [double],
+  "CombinedLength" : [double],
+  "LongestRouteLongth" : [double],
+  "LongestRouteTime" : [double],
+  "NumberOfRoutes" : [int],
+  "WorkerId" : [int],
+  "Worker" : [Worker],
+  "CaseId" : [int]
 }
 ```
 
