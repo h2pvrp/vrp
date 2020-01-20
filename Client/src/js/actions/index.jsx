@@ -1,6 +1,4 @@
 import {
-  DATA_LOADED,
-  DATA_REQUESTED,
   ADD_PACKAGE,
   DELETE_PACKAGE,
   EDIT_PACKAGE,
@@ -11,10 +9,9 @@ import {
   ADD_DEPO,
   SET_RESULT_VISIBILITY,
   ADD_RESULT,
+  ADD_ALERT,
+  DELETE_ALERT,
 } from "../constants/action-types";
-
-export const getData = () => ({ type: DATA_REQUESTED });
-export const dataLoaded = payload => ({ type: DATA_LOADED, payload });
 
 export const add_package = (latitude, longitude) => ({
   type: ADD_PACKAGE,
@@ -70,4 +67,14 @@ export const set_result_visibility = (index, isVisible) => ({
 export const add_result = (result) => ({
   type: ADD_RESULT,
   result
-})
+});
+
+export const add_alert = (alert) => ({
+  type: ADD_ALERT,
+  alert
+});
+
+export const delete_alert = (index) => ({
+  type: DELETE_ALERT,
+  index
+});

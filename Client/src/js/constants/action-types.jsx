@@ -8,12 +8,8 @@ import {
   WEBSOCKET_SEND,
 } from '@giantmachines/redux-websocket';
 
-export const DATA_LOADED = "DATA_LOADED";
 
 export const REGISTER_USER = "REGISTER_USER";
-
-export const DATA_REQUESTED = "DATA_REQUESTED";
-export const API_ERRORED = "API_ERRORED";
 
 export const ADD_PACKAGE = "ADD_PACKAGE";
 export const DELETE_PACKAGE = "DELETE_PACKAGE";
@@ -25,3 +21,5 @@ export const TOGGLE_DEPO_MODE = "TOGGLE_DEPO_MODE";
 export const ADD_DEPO = "ADD_DEPO";
 export const SET_RESULT_VISIBILITY = "SET_RESULT_VISIBILITY";
 export const ADD_RESULT = "ADD_RESULT";
+export const ADD_ALERT = "ADD_ALERT";
+export const DELETE_ALERT = "DELETE_ALERT";
