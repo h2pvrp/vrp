@@ -139,7 +139,8 @@ function rootReducer(state = initialState, action) {
         name: payload.Worker.Name,
         computationTime: payload.ComputationTime,
         combinedLength: payload.CombinedLength,
-        longestRoute: payload.LongestRoute,
+        longestRouteLength: payload.LongestRouteLength,
+        longestRouteTime: payload.LongestRouteTime,
         averageRoute: payload.CombinedLength / payload.NumberOfRoutes,
       };
       console.log('result:', result);
