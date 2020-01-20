@@ -19,6 +19,10 @@ namespace VrpBackend.EntityFramework
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.HasPostgresExtension("postgis");
+
+            builder.Entity<Worker>()
+                    .HasIndex(u => u.Name)
+                    .IsUnique();
         }
     }
 }

@@ -13,7 +13,6 @@ namespace VrpBackend.Models
         public int VehicleCount { get; set; }
         public MultiPoint Points { get; set; }
         public Point Base { get; set; }
-        public DateTime Timestamp { get; set; }
 
         public long ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
