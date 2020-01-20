@@ -7,7 +7,10 @@ using System.Collections.Generic;
 using VrpBackend.Workers;
 using VrpBackend.WebSockets;
 using VrpBackend.Models;
-
+using VrpBackend.EntityFramework;
+using VrpBackend.Serialization;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace VrpBackend.Controllers 
 {
@@ -17,30 +20,58 @@ namespace VrpBackend.Controllers
         private const int _BUFFER_SIZE = 1024 * 4;
         private readonly WorkerService _workerService;
         private readonly WebSocketHandler _webSocketHandler;
+        private readonly WebApiContext _context;
         // TODO: from db or config file
-        private readonly List<Worker> _workers = new List<Worker> {
-            new Worker() 
+        private readonly List<WorkerData> _workersData = new List<WorkerData> {
+            new WorkerData() 
             {
-                Id = 1,
-                Name = "or-tools Distance",
+                Name = "OR-Tools Distance",
                 Port = 5005,
                 Host = "http://localhost",
                 Endpoint = "/"
             },
-            new Worker() 
+            new WorkerData() 
             {
-                Id = 2,
-                Name = "or-tools Duration",
+                Name = "OR-Tools Duration",
                 Port = 5006,
                 Host = "http://localhost",
                 Endpoint = "/"
             },
         };
 
-        public WebSocketController(WorkerService workerService)
+        public WebSocketController(WorkerService workerService, WebApiContext context)
         {
             _workerService = workerService;
-            _webSocketHandler = new JsonWorkersHandler(_workerService, _workers);
+            _context = context;
+            _webSocketHandler = new JsonWorkersHandler(_workerService, context, GetWorkers(_workersData, context));
+        }
+
+        private List<Worker> GetWorkers(List<WorkerData> workersData, WebApiContext context) 
+        {
+            List<Worker> workers = new List<Worker>();
+            foreach (WorkerData workerData in workersData)
+            {
+                Worker worker = context.Workers.FirstOrDefault(w => w.Name == workerData.Name);
+                if (worker == null)
+                {
+                    worker = new Worker() 
+                    {
+                        Name = workerData.Name,
+                        Host = workerData.Host,
+                        Port = workerData.Port,
+                        Endpoint = workerData.Endpoint
+                    };
+                    context.Workers.Add(worker);
+                } else {
+                    worker.Host = workerData.Host;
+                    worker.Port = workerData.Port;
+                    worker.Endpoint = workerData.Endpoint;
+                    context.Workers.Update(worker);
+                }
+                workers.Add(worker);
+            }
+            context.SaveChanges();
+            return workers;
         }
 
         [HttpGet]
