@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { Alert } from 'react-bootstrap'
 
-import {
-  delete_alert,
-} from '../actions'
+import { delete_alert } from '../actions'
 
 const mapStateToProps = state => ({
   alerts: state.alerts,
@@ -15,7 +13,6 @@ const mapDispatchToProps = dispatch => ({
 });
 
 class ConnectedAlerts extends Component {
-
   constructor(props) {
   super(props);
     this.onButtonCloseClick = this.onButtonCloseClick.bind(this);
@@ -29,17 +26,20 @@ class ConnectedAlerts extends Component {
   }
 
   render() {
-  const { alerts } = this.props;
-  console.log(alerts);
-  return (<div>
-    {alerts.map((alert, index) => (
-      <Alert key={index} variant={alert.variant} onClose={this.onButtonCloseClick(index)} dismissible>
-        <p className="mb-0">{alert.text}</p>
-      </Alert>
-    ))}
-  </div>);
+    const { alerts } = this.props;
+    return (<div>
+      {alerts.map((alert, index) => (
+        <Alert
+          key={index}
+          variant={alert.variant}
+          onClose={this.onButtonCloseClick(index)}
+          dismissible
+        >
+          <p className="mb-0">{alert.text}</p>
+        </Alert>
+      ))}
+    </div>);
   }
-
 }
 
 const Alerts = connect(mapStateToProps, mapDispatchToProps)(ConnectedAlerts);
