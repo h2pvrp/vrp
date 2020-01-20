@@ -171,29 +171,41 @@ Instalacja oprogramowania składa się z dwóch części – instalacji aplikacj
 ### 3.  Instrukcja kreacji workera
 
 1. Zainstalowac dockera
+
 2. Zainstalowac OSM Backend
-2.1 Pobrac mapy,
+
+* Pobrac mapy
     recznie:
         http://download.geofabrik.de/europe/poland/mazowieckie-latest.osm.pbf
     lub za pomoca wget:
         wget http://download.geofabrik.de/europe/poland/mazowieckie-latest.osm.pbf
-2.2 Wykonac polecenia w katalogu z pobrana mapa:
-    docker run -t -v "${PWD}:/data" osrm/osrm-backend osrm-extract -p /opt/car.lua /data/mazowieckie-latest.osm.pbf
-    docker run -t -v "${PWD}:/data" osrm/osrm-backend osrm-partition /data/mazowieckie-latest.osrm
-    docker run -t -v "${PWD}:/data" osrm/osrm-backend osrm-customize /data/mazowieckie-latest.osrm
-    docker run -t -i -p 5010:5000 -v "${PWD}:/data" osrm/osrm-backend osrm-routed /data/mazowieckie-latest.osrm
-2.3 Help:
+
+* Wykonac polecenia w katalogu z pobrana mapa:
+```
+docker run -t -v "${PWD}:/data" osrm/osrm-backend osrm-extract -p /opt/car.lua /data/mazowieckie-latest.osm.pbf
+docker run -t -v "${PWD}:/data" osrm/osrm-backend osrm-partition /data/mazowieckie-latest.osrm
+docker run -t -v "${PWD}:/data" osrm/osrm-backend osrm-customize /data/mazowieckie-latest.osrm
+docker run -t -i -p 5010:5000 -v "${PWD}:/data" osrm/osrm-backend osrm-routed /data/mazowieckie-latest.osrm
+```
+
+* Help:
     https://hub.docker.com/r/osrm/osrm-backend/
+
 3. Zainstalowac pyenv (instalacja i konfiguracja .bashrc):
     https://realpython.com/intro-to-pyenv/
-3.1 Instalacja Pythona 3.7.6:
+
+* Instalacja Pythona 3.7.6:
     pyenv install 3.7.6
+
 4. W katalogu z workerem zmienic ewentualnie parametry w settings.json
+
 5. W katalogu z workerem wykonac:
-    pyenv virtualenv 3.7.6 <nazwa_srodowiska>
-    pyenv local <nazwa_srodowiska>
-    pip install -r requirements.txt
-    python worker.py
+```
+pyenv virtualenv 3.7.6 <nazwa_srodowiska>
+pyenv local <nazwa_srodowiska>
+pip install -r requirements.txt
+python worker.py
+```
 
 # Instrukcja użytkownika
 
