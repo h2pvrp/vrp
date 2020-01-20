@@ -54,11 +54,11 @@ class ConnectedResultsStats extends Component {
             {results.map((result, index) => (
               <tr key={index}>
                 <th>{result.name}</th>
-                <td>{result.computationTime}</td>
-                <td>{result.combinedLength}</td>
-                <td>{result.longestRouteLength}</td>
-                <td>{result.longestRouteTime}</td>
-                <td>{result.averageRoute}</td>
+                <td>{result.computationTime} <em>ms</em></td>
+                <td>{result.combinedLength} <em>km</em></td>
+                <td>{result.longestRouteLength} <em>km</em></td>
+                <td>{result.longestRouteTime} <em>min</em></td>
+                <td>{result.averageRoute} <em>km</em></td>
                 <td>
                   <input
                     type="checkbox"
