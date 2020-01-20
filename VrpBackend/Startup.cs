@@ -31,9 +31,8 @@ namespace VrpBackend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(
-                    Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationDbContext>(opt =>
+                opt.UseNpgsql(Configuration.GetConnectionString("WebApiConection"), o => o.UseNetTopologySuite()));
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -56,8 +55,8 @@ namespace VrpBackend
             // workers
             services.AddHttpClient<WorkerService>();
 
-            //services.AddEntityFrameworkNpgsql().AddDbContext<WebApiContext>(opt =>
-            //    opt.UseNpgsql(Configuration.GetConnectionString("WebApiConection"), o => o.UseNetTopologySuite()));
+            services.AddEntityFrameworkNpgsql().AddDbContext<WebApiContext>(opt =>
+                opt.UseNpgsql(Configuration.GetConnectionString("WebApiConection"), o => o.UseNetTopologySuite()));
 
         }
 

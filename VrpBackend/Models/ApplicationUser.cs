@@ -9,6 +9,6 @@ namespace VrpBackend.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        //public List<Case> Cases { get; set; }
+        public List<Case> Cases { get; set; }
     }
 }
