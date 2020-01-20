@@ -44,7 +44,8 @@ class ConnectedResultsStats extends Component {
               <th>Worker</th>
               <th>Computation Time</th>
               <th>Combined Length</th>
-              <th>Longest Route</th>
+              <th>Longest Route Length</th>
+              <th>Longest Route Time</th>
               <th>Average Route</th>
               <th>Hide?</th>
             </tr>
@@ -55,7 +56,8 @@ class ConnectedResultsStats extends Component {
                 <th>{result.name}</th>
                 <td>{result.computationTime}</td>
                 <td>{result.combinedLength}</td>
-                <td>{result.longestRoute}</td>
+                <td>{result.longestRouteLength}</td>
+                <td>{result.longestRouteTime}</td>
                 <td>{result.averageRoute}</td>
                 <td>
                   <input

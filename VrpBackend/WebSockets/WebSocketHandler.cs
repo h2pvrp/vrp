@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NetTopologySuite.Geometries;
 
+using VrpBackend.EntityFramework;
 using VrpBackend.Models;
 using VrpBackend.Serialization;
 using VrpBackend.Workers;
@@ -54,11 +55,13 @@ namespace VrpBackend.WebSockets
     public class JsonWorkersHandler: WebSocketHandler
     {
         private readonly WorkerService _workerService;
+        private readonly WebApiContext _context;
         private readonly List<Worker> _workers;
 
-        public JsonWorkersHandler(WorkerService workerService, List<Worker> workers)
+        public JsonWorkersHandler(WorkerService workerService, WebApiContext context, List<Worker> workers)
         {
             _workerService = workerService;
+            _context = context;
             _workers = workers;
         }
 
@@ -66,7 +69,6 @@ namespace VrpBackend.WebSockets
         {
             string jsonString = Encoding.UTF8.GetString(buffer, 0, result.Count);
             Case caseModel = JsonSerializer.Deserialize<CaseData>(jsonString).ToModel();
-
             string caseSerialized = JsonSerializer.Serialize(new CaseData(caseModel));
             IEnumerable<Task<Result>> postTasksQuery = 
                 from worker in _workers select _workerService.PostCase(worker, caseSerialized);
@@ -76,7 +78,6 @@ namespace VrpBackend.WebSockets
                 Task<Result> finishedTask = await Task.WhenAny(postTasks);
                 postTasks.Remove(finishedTask);
                 Result resultModel = await finishedTask;
-                resultModel.Case = caseModel;
                 resultModel.CaseId = caseModel.Id;
                 string resultSerialized = JsonSerializer.Serialize(new ResultData(resultModel));
                 byte[] resultBuffer = Encoding.UTF8.GetBytes(resultSerialized);
