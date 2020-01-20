@@ -34,6 +34,10 @@
 - Backend: C# ASP.NET Core 3.1
 - SPA Frontend: React, Redux, Redux Saga (zmienić z redux-thunk)
 
+# Opis systemu
+
+Aplikacja pozwala użytkownikom porównywać wyniki rozwiązania problemu VRP (Vehicle Routing Problem), pochodzące z różnych źródeł. Użytkownik za pomocą interfejsu użytkownika tworzy instancje problemu wprowadzając potrzebne dane, dane te są przesyłane do backendu za pomocą mechanizmu WebSocket. Na backendzie problem jest zapisywany w bazie danych i rozsyłany za pomocą protokołu HTTP do poszczególych workerów, które odsyłają rozwiązanie. Rozwiązanie jest zapisywane w bazie danych a następnie odysłane i wyświetlane użytkownikowi.  
+
 # Wymagania funkcjonalne
 
 ### 1. Użytkownik chce dodać nowy punkt na mapie
@@ -63,7 +67,7 @@ Aby użytkownik mógł się zalogować, musi się najpierw zarejestrować na wit
 ### 7. Użytkownik chce się zarejestrować
 
 W celu rejestracji, użytkownik musi przejść do strony rejestracji.
-Wypełnia tam krótki formularz (adres mailowy, nazwa użytkownika, hasło, potwierdzenie hasła, lokalizacja) 
+Wypełnia tam krótki formularz (adres mailowy, nazwa użytkownika, hasło, potwierdzenie hasła, lokalizacja)
 oraz klika przycisk „zarejestruj”.
 
 ### 8. Użytkownik chce przejrzeć historię wyszukiwać tras
@@ -108,3 +112,32 @@ uaktualniające dane użytkowników w bazie. Zbierane są dane o lokalizacji uż
 # Architektura
 
 ![arch.png](./arch.png)
+
+## Backend
+
+Aplikacja webowa ASP.NET Core 3.1 komunikująca się z aplikacją frontendową za pomocą mechanizmu WebSocket. Aplikacja wysyła żądania rozwiązania problemu do poszczególych workerów za pomocą protokołu HTTP, przy pomocy klasy "WorkerService". Aplikacja łączy się z bazą danych Postgres przy pomocy framework'a Entity Framework. Kontekst danych znajduje się w klasie "WebApiContext".
+
+## Baza danych
+
+Dane są składowane w bazie danych Postgres z rozszerzeniem Postgis umożliwiającym zapisywanie danych geograficznych. Baza danych składa się z następujących tabel:
+
+* Cases - zawierającą problemy VRP wprowadzone przez użytkowników
+* Results - zawierającej wyniki określonych problemów
+* Workers - zawierającej znane instancje workerów rozwiązujących problem VPR
+
+# Instrukcja użytkownika
+
+Użytkownik może zalogować się do aplikacji za pomocą zakładki "Login". Zalogowany użytkownik może wyświetlać historię wprowadzonych przez siebie problemów i ich rozwiązań.
+
+Aby stworzyć instancję problemu należy nanieść na mapie punkty będące przystankami w problemie VRP. Punkty dodawane są poprzez kliknięcie na mapę, dodane punkty wyświetlane są na mapie w postaci znaczników w kolorze niebieskim i w postaci listy po prawej stronie panelu użytkownika. Z poziomu listy możliwa jest edycja lub usunięcie wybranego punktu.
+
+Za pomocą przycisku "Select depo" użytkownik może wybrać bazę w problemie VRP. Po kliknięciu na mapę baza wyświetlana jest w postaci białego znacznika.
+
+Wysłanie kompletnego problemu realizowane jest przez wciśnięcie przycisku "Send".
+
+Rozwiązania problemu wyświetlane są poniżej mapy.
+
+
+# Wnioski
+
+Implementacja workerów w języku python ułatwiła nam pracę ze względu na to, że nie jest to język silnie typowany. Programowanie współbierzne przysporzyło nam dużo problemów.
