@@ -1,12 +1,9 @@
 import { createStore, applyMiddleware, compose } from "redux";
 import rootReducer from "../reducers/index";
-import createSagaMiddleware from "redux-saga";
-import apiSaga from "../sagas/api-saga";
 import reduxWebsocket, { connect } from '@giantmachines/redux-websocket';
 import { WEBSOCKET_URL } from '../constants/config'
 import { add_result } from '../actions/index'
 
-const initialiseSagaMiddleware = createSagaMiddleware();
 
 const storeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -16,11 +13,9 @@ const reduxWebsocketMiddleware = reduxWebsocket();
 const store = createStore(
   rootReducer,
   storeEnhancers(
-    applyMiddleware(initialiseSagaMiddleware, reduxWebsocketMiddleware)
+    applyMiddleware(reduxWebsocketMiddleware)
   ),
 );
-
-initialiseSagaMiddleware.run(apiSaga);
 
 store.dispatch(connect(WEBSOCKET_URL));
 

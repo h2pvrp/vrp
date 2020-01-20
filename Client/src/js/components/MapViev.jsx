@@ -14,10 +14,12 @@ import {
   toggle_depo_mode,
   add_depo,
   set_result_visibility,
+  add_alert,
 } from '../actions'
 import { ATTRIBUTION, MAP_URL } from '../constants/config'
 import 'leaflet/dist/leaflet.css';
 import './MapView.css';
+import Alerts from './Alerts';
 
 
 const Icon = L.Icon.extend({
@@ -60,7 +62,7 @@ const mapDispatchToProps = dispatch => ({
   center_map: index => dispatch(center_map(index)),
   select_package: index => dispatch(select_package(index)),
   websocket_send: data => dispatch(send(data)),
-  set_result_visibility: (index, isVisible) => dispatch(set_result_visibility(index, isVisible)),
+  add_alert: alert => dispatch(add_alert(alert)),
 });
 
 class ConnectedMapViev extends Component {
@@ -73,7 +75,7 @@ class ConnectedMapViev extends Component {
     this.onEditClick = this.onEditClick.bind(this);
     this.onSendClick = this.onSendClick.bind(this);
     this.onDepoClick = this.onDepoClick.bind(this);
-    this.onCheckboxChange = this.onCheckboxChange.bind(this);
+
   }
 
   onMapClick(event) {
@@ -129,31 +131,25 @@ class ConnectedMapViev extends Component {
     // console.log(event);
   }
 
-  onCheckboxChange(index) {
-    return event => {
-      const { set_result_visibility } = this.props;
-      set_result_visibility(index, event.target.checked);
-    }
-  }
 
   onSendClick(event) {
-    const { websocket_send, packages, depo } = this.props;
+    const { websocket_send, packages, depo, add_alert } = this.props;
     const vehicleCount = Number(document.querySelector('#v_num').value);
 
     let flag = false;
 
     if(packages.length < 1) {
-      console.error('No packages selected!');
+      add_alert({variant: 'danger', text: 'No packages selected!'});
       flag = true;
     }
 
     if(!depo) {
-      console.error('Depo not selected!');
+      add_alert({variant: 'danger', text: 'Depo not selected!'});
       flag = true;
     }
 
     if(!vehicleCount) {
-      console.error('Bad vehicle count!');
+      add_alert({variant: 'danger', text: 'Bad vehicle count!'});
       flag = true;
     }
 
@@ -162,7 +158,6 @@ class ConnectedMapViev extends Component {
     }
 
     const formated_packages = packages.map(value => [value.latitude, value.longitude]);
-    console.log(vehicleCount);
 
     websocket_send({
       VehicleCount: vehicleCount,
@@ -175,81 +170,69 @@ class ConnectedMapViev extends Component {
     const { latitude, longitude, zoom, packages, selected_package, depo, results, depoWrapper } = this.props;
     const position = [latitude, longitude];
 
-
     const routes = results.filter((result) => !result.hidden).reduce(
       (acc, val) => {
-        console.log(val);
         const color = val.color;
         const wrappedRoutes = val.routes.map((r, i) => ({polyline: r, key: i, color}));
         return [...acc, ...wrappedRoutes];
       }, []
       );
-    console.log('rrr', routes);
 
     return (
-      <Row>
-        <Col sm={9}>
-          <Map className="lefleat-map" center={position} zoom={zoom} onClick={this.onMapClick}>
-            <TileLayer attribution={ATTRIBUTION} url={MAP_URL}/>
-            {packages.map((value, index) => {
-              const icon = (index === selected_package) ? iconSelected : iconDefault;
-              return (
-               <Marker key={index} position={[value.latitude, value.longitude]} icon={icon}
-                onClick={this.onMarkerClick(index)}/>
-              );
-            })}
-            {depoWrapper.map((d, _) => {
-              return (
-                <Marker key="depo" position={[d.latitude, d.longitude]} icon={iconDepo}
-                onClick={this.onDepoMarkerClick}/>
-              );
-            })}
-
-            {routes.map((route, index) => {
+      <div>
+        <Alerts />
+        <Row className="mb-2">
+          <Col sm={9}>
+            <Map className="lefleat-map" center={position} zoom={zoom} onClick={this.onMapClick}>
+              <TileLayer attribution={ATTRIBUTION} url={MAP_URL}/>
+              {packages.map((value, index) => {
+                const icon = (index === selected_package) ? iconSelected : iconDefault;
                 return (
-                  <Polyline key={index} positions={route.polyline} color={route.color}/>
-                )
-            })}
+                 <Marker key={index} position={[value.latitude, value.longitude]} icon={icon}
+                  onClick={this.onMarkerClick(index)}/>
+                );
+              })}
+              {depoWrapper.map((d, _) => {
+                return (
+                  <Marker key="depo" position={[d.latitude, d.longitude]} icon={iconDepo}
+                  onClick={this.onDepoMarkerClick}/>
+                );
+              })}
 
-          </Map>
-        </Col>
-        <Col>
-          <h2>Packages</h2>
-          <ListGroup>
-            {packages.map((_, index) => (
-              <ListGroup.Item key={index} active={index === selected_package}
-                onClick={this.onPackageClick(index)}>
-                  {index}
-                  <Button className="float-right" variant="danger"
-                    onClick={this.onDeleteClick(index)}>Delete</Button>
-                  <Button className="float-right mr-2" variant="secondary"
-                    onClick={this.onEditClick(index)}>Edit</Button>
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-          <br/>
-          <Button className="w-100 mb-2" variant="primary" onClick={this.onDepoClick}>Select depo</Button>
+              {routes.map((route, index) => {
+                  return (
+                    <Polyline key={index} positions={route.polyline} color={route.color}/>
+                  )
+              })}
 
-          <div className="form-group BIND ME PLS">
-            <label htmlFor="v_num">Number of vehicles</label>
-            <input type="number" min="1" className="form-control" id="v_num"/>
-          </div>
+            </Map>
+          </Col>
+          <Col>
+            <h2>Packages</h2>
+            <ListGroup>
+              {packages.map((_, index) => (
+                <ListGroup.Item key={index} active={index === selected_package}
+                  onClick={this.onPackageClick(index)}>
+                    {index}
+                    <Button className="float-right" variant="danger"
+                      onClick={this.onDeleteClick(index)}>Delete</Button>
+                    <Button className="float-right mr-2" variant="secondary"
+                      onClick={this.onEditClick(index)}>Edit</Button>
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+            <br/>
+            <Button className="w-100 mb-2" variant="primary" onClick={this.onDepoClick}>Select depo</Button>
 
-          <Button className="w-100" variant="success" onClick={this.onSendClick}>Send</Button>
+            <div className="form-group BIND ME PLS">
+              <label htmlFor="v_num">Number of vehicles</label>
+              <input type="number" min="1" className="form-control" id="v_num"/>
+            </div>
 
-          <h3>Results</h3>
-          {results.map((value, index) => {
-            console.log(value, index);
-            return (
-              <div key={index} className="form-group form-check">
-                <input type="checkbox" className="form-check-input" id={index} key={index} onChange={this.onCheckboxChange(index)}></input>
-                <label className="form-check-label" htmlFor={index}>{value.name}</label>
-              </div>
-              )
-          })}
-
-        </Col>
-      </Row>
+            <Button className="w-100" variant="success" onClick={this.onSendClick}>Send</Button>
+          </Col>
+        </Row>
+      </div>
     )
   }
 }
@@ -257,3 +240,5 @@ class ConnectedMapViev extends Component {
 const MapViev = connect(mapStateToProps, mapDispatchToProps)(ConnectedMapViev);
 
 export default MapViev;
+
+
