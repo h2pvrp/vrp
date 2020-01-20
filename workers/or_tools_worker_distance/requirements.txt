@@ -1,0 +1,6 @@
+aiohttp>=3.6.2
+ortools>=7.4
+
+# aioworker==1.0.0
+git+https://github.com/h2pvrp/aioworker
+

@@ -1,0 +1,11 @@
+{
+    "Base": {
+        "Host": "localhost",
+        "Port": 5005,
+        "Name": "OR-Tools Distance"
+    },
+    "OSMB": {
+        "Host": "localhost",
+        "Port": 5010
+    }
+}

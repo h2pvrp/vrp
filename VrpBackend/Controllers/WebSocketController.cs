@@ -22,21 +22,24 @@ namespace VrpBackend.Controllers
             new Worker() 
             {
                 Id = 1,
-                Name = "Dumm",
+                Name = "or-tools Distance",
                 Port = 5005,
             },
+            
             new Worker() 
             {
                 Id = 2,
-                Name = "Dumm 2",
+                Name = "or-tools Duration",
                 Port = 5006,
             },
+            /*
             new Worker() 
             {
                 Id = 3,
                 Name = "Dummy 3",
                 Port = 5007,
             }
+            */
         };
 
         public WebSocketController(WorkerService workerService)
