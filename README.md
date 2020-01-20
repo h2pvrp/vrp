@@ -168,9 +168,11 @@ Instalacja oprogramowania składa się z dwóch części – instalacji aplikacj
 
 Należy mieć dostęp do instancji serwera Postgres z rozszerzeniem Postgis i w pliku appsettings.json dodać odpowiedni klucz dostępu (ustawić connection string).
 Następnie w terminalu należy uruchomić polecenie:
+
     dotnet ef database update
 
 Uruchomienie aplikacji serwerowej wykonuje się za pomocą polecenia:
+
     dotnet run
 
 Powyższe polecenia należy wykonać w folderze zawierającym pliki wykonalne aplikacji.
