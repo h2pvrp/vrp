@@ -1,13 +1,19 @@
 import React from "react";
-import Post from "./Posts";
 
-import { Navbar, Container } from 'react-bootstrap'
+import { Navbar, Container, Row, Col } from 'react-bootstrap'
 import MapViev from './MapViev';
+import ResultsStats from './ResultsStats';
 
 const App = () => (
   <Container className="main">
     <div>
         <MapViev/>
+        <Row>
+          <Col sm>
+            <h2>Results</h2>
+            <ResultsStats/>
+          </Col>
+        </Row>
     </div>
   </Container>
 );

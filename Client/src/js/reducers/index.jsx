@@ -1,7 +1,4 @@
 import {
-  DATA_LOADED,
-  API_ERRORED,
-
   ADD_PACKAGE,
   DELETE_PACKAGE,
   EDIT_PACKAGE,
@@ -12,6 +9,8 @@ import {
   SELECT_PACKAGE,
   ADD_RESULT,
   SET_RESULT_VISIBILITY,
+  ADD_ALERT,
+  DELETE_ALERT,
 } from "../constants/action-types";
 
 import { DEFAULT_PREFIX, WEBSOCKET_MESSAGE } from '@giantmachines/redux-websocket';
@@ -35,24 +34,13 @@ const initialState = {
   last_deleted_package: null,
 
   results: [],
+
+  alerts: [],
 };
 
 function rootReducer(state = initialState, action) {
   console.log(action);
   switch(action.type) {
-
-    case DATA_LOADED:
-      return {
-        ...state,
-        remoteArticles: state.remoteArticles.concat(action.payload)
-      };
-
-    case API_ERRORED:
-      return {
-        ...state,
-        remoteArticles: [API_ERRORED]
-      };
-
     case ADD_PACKAGE:
       return {
         ...state,
@@ -137,7 +125,7 @@ function rootReducer(state = initialState, action) {
 
     case `${DEFAULT_PREFIX}::${WEBSOCKET_MESSAGE}`:
       const payload = JSON.parse(action.payload.message);
-      console.log(payload);
+      console.log('Payload:', payload);
       // temporary solution
       const colors = ["#3388ff", "#ff8833", "#ff3388"];
       const result = {
@@ -147,16 +135,32 @@ function rootReducer(state = initialState, action) {
         worker: payload.Worker,
         workerId: payload.WorkerId,
         hidden: false,
-        color: colors[state.results.length % colors.length],
+        color: payload.Color || colors[state.results.length % colors.length],
         name: payload.Worker.Name,
+        computationTime: payload.ComputationTime,
+        combinedLength: payload.CombinedLength,
+        longestRoute: payload.LongestRoute,
+        averageRoute: payload.CombinedLength / payload.NumberOfRoutes,
       };
-      console.log(result);
+      console.log('result:', result);
 
 
 
       return {
         ...state,
         results: [...state.results, result]
+      };
+
+    case ADD_ALERT:
+      return {
+        ...state,
+        alerts: [...state.alerts, action.alert],
+      };
+
+    case DELETE_ALERT:
+      return {
+        ...state,
+        alerts: state.alerts.filter((_, index) => index !== action.index),
       };
 
     default:
