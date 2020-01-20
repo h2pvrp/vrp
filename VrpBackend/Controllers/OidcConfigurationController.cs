@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace VrpBackend.Controllers
 {
@@ -20,6 +21,9 @@ namespace VrpBackend.Controllers
         public IActionResult GetClientRequestParameters([FromRoute]string clientId)
         {
             var parameters = ClientRequestParametersProvider.GetClientParameters(HttpContext, clientId);
+
+            var ipAddress = HttpContext.Connection.RemoteIpAddress;
+            Console.WriteLine($"User logged from ip: {ipAddress}");
             return Ok(parameters);
         }
     }

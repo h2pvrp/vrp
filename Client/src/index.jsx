@@ -9,7 +9,7 @@ import "./index.css";
 
 import App from "./js/components/App";
 import { NavMenu } from "./js/components/NavMenu";
-// import AuthorizeRoute from "./js/components/api-authorization/AuthorizeRoute";
+import AuthorizeRoute from "./js/components/api-authorization/AuthorizeRoute";
 import ApiAuthorizationRoutes from "./js/components/api-authorization/ApiAuthorizationRoutes";
 import { ApplicationPaths } from "./js/components/api-authorization/ApiAuthorizationConstants";
 import Statistics from "./js/components/statistics-view";
@@ -26,7 +26,7 @@ render(
           path={ApplicationPaths.ApiAuthorizationPrefix}
           component={ApiAuthorizationRoutes}
         />
-        <Route path="/statistics" component={Statistics} />
+        <AuthorizeRoute path="/statistics" component={Statistics} />
         <Route path="/login" component={ApiAuthorizationRoutes} />
         <Route path="/" component={App} /> {/**this have to be last route */}
       </Switch>
