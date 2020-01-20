@@ -113,9 +113,18 @@ uaktualniające dane użytkowników w bazie. Zbierane są dane o lokalizacji uż
 
 ![arch.png](./arch.png)
 
+## Frontend
+
+Aplikacja SPA (Single Page Application) zbudowana za pomocą React Framework. Połączenie z serwerem głównym realizowane jest za pomocą WebSocket, instancje problemu są wysyłane w formacie JSON.
+
 ## Backend
 
 Aplikacja webowa ASP.NET Core 3.1 komunikująca się z aplikacją frontendową za pomocą mechanizmu WebSocket. Aplikacja wysyła żądania rozwiązania problemu do poszczególych workerów za pomocą protokołu HTTP, przy pomocy klasy "WorkerService". Aplikacja łączy się z bazą danych Postgres przy pomocy framework'a Entity Framework. Kontekst danych znajduje się w klasie "WebApiContext".
+
+### Współpraca w workerami
+
+Klasa WorkerService wysyła na endpoint danego workera request protokułu HTTP zawierający instancję problemu do rozwiązania i oczekuje odpowiedzi w formacie JSON.
+Aby dodać nową instancję workera, którą aplikacja może obsługiwać należy wprowadzić jej dane do bazy danych tak aby serwer miał dostęp do endpoitu oraz skonfigurować workera tak żeby mógł przyjmować requesty z danymi od serwera niezależnie od implementacji.
 
 ## Baza danych
 
@@ -124,6 +133,37 @@ Dane są składowane w bazie danych Postgres z rozszerzeniem Postgis umożliwiaj
 * Cases - zawierającą problemy VRP wprowadzone przez użytkowników
 * Results - zawierającej wyniki określonych problemów
 * Workers - zawierającej znane instancje workerów rozwiązujących problem VPR
+
+# Instrukcja wdrożenia
+
+## Dokumentacja wdrożeniowa
+
+Do instalacji aplikacji webowej wymagany jest:
+
+* Node.js - w wersji 6.12 lub wyższej, który można pobrać ze strony: https://nodejs.org.
+
+Potrzeba również biblioteki:
+
+* serve – w wersji 11.0.0 lub wyższej
+
+można ją pobrać uruchamiając w wierszu poleceń:
+
+    npm install –save serve
+
+pozostałe pakiety dostarczane są wraz z aplikacją.
+
+## Instrukcja instalacji
+
+Instalacja oprogramowania składa się z dwóch części – instalacji aplikacji webowej oraz aplikacji bazodanowej.
+
+### Instalacja aplikacji webowej
+
+1.	Rozpakowujemy archiwum z plikami do wybranego katalogu
+2.	Uruchamiany wiersz poleceń i przechodzimy do wybranego wcześniej katalogu
+3.	Wpisujemy w wierszu poleceń poniższy kod i uruchamiany klikając „Enter”
+    serve build
+4.	 Aplikacja webowa gotowa jest do użycia pod adresem wskazanym w wierszu poleceń
+
 
 # Instrukcja użytkownika
 
