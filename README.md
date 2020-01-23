@@ -199,15 +199,10 @@ Powyższe polecenia należy wykonać w folderze zawierającym pliki wykonalne ap
 
 1. Zainstalować [dockera](https://www.docker.com/).
 
-2. Zainstalować OSM Backend:
+2. Zainstalować OSM Backend: (Help: https://hub.docker.com/r/osrm/osrm-backend/)
 
 ```bash
 wget http://download.geofabrik.de/europe/poland/mazowieckie-latest.osm.pbf
-```
-
-Wykonać polecenia w katalogu z pobraną mapą: (Help: https://hub.docker.com/r/osrm/osrm-backend/)
-
-``` bash
 docker run -t -v "${PWD}:/data" osrm/osrm-backend osrm-extract -p /opt/car.lua /data/mazowieckie-latest.osm.pbf
 docker run -t -v "${PWD}:/data" osrm/osrm-backend osrm-partition /data/mazowieckie-latest.osrm
 docker run -t -v "${PWD}:/data" osrm/osrm-backend osrm-customize /data/mazowieckie-latest.osrm
